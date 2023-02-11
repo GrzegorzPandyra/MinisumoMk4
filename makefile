@@ -22,9 +22,9 @@ CFLAGS=-I $(INC_DIR) -Wall -Os -std=c99
 
 #source files list
 SRC_LIST =  $(SRC_DIR)/main.c \
-			# $(SRC_DIR)/serial_tx.c \
-			# $(SRC_DIR)/serial_rx.c \
-			# $(SRC_DIR)/serial_progmem.c \
+			$(SRC_DIR)/serial_tx.c \
+			$(SRC_DIR)/serial_rx.c \
+			$(SRC_DIR)/serial_progmem.c \
 			# $(SRC_DIR)/ICCM.c \
 			# $(SRC_DIR)/distance_sensor.c \
 			# $(SRC_DIR)/line_sensor.c \
@@ -36,6 +36,19 @@ DEFINES = 	-D DUMMY_DEFINE_1 \
 
 #make all rule
 all: minisumo_mk4.elf minisumo_mk4.hex mem
+	@echo '					              ____'
+	@echo '					            /____ `\'
+	@echo '					           ||_  _`\ \'
+	@echo '					     .-.   `|O, O  ||'
+	@echo '					     | |    (/    -)\'
+	@echo '					     | |    |`- ` |\`'
+	@echo '					  __/  |    | _/  |'
+	@echo '					 (___) \.  _.\__. `\___'
+	@echo '					 (___)  )\/  \    _/  ~\.'
+	@echo '					 (___) . \   `--  _   `\	'
+	@echo '					  (__)-    ,/        (   |'
+	@echo '					       `--~|         |   |'
+	@echo '					           |         |   |'
 	@echo '				******                             ******'
 	@echo '				****  Finished building all targets  ****'
 	@echo '				******                             ******'
