@@ -7,7 +7,7 @@
         both MCUs, differences are handled by #ifdef sections 
     */
 
-    #include "serial_tx.h"
+    #include "UART_TX.h"
     #include "serial_rx.h"
     #include "config.h"
 

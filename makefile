@@ -22,7 +22,9 @@ CFLAGS=-I $(INC_DIR) -Wall -Os -std=c99
 
 #source files list
 SRC_LIST =  $(SRC_DIR)/main.c \
-			$(SRC_DIR)/serial_tx.c \
+			$(SRC_DIR)/UART_driver.c \
+			$(SRC_DIR)/UART_TX.c \
+			$(SRC_DIR)/MCAL.c \
 			$(SRC_DIR)/serial_progmem.c \
 			# $(SRC_DIR)/serial_rx.c \
 			# $(SRC_DIR)/ICCM.c \
@@ -32,7 +34,7 @@ SRC_LIST =  $(SRC_DIR)/main.c \
 			# $(SRC_DIR)/AI.c \
 
 DEFINES = 	-D DUMMY_DEFINE_1 \
-			-D DUMMY_DEFINE_2 \
+			-D UART_TX_DEBUG \
 
 #make all rule
 all: minisumo_mk4.elf minisumo_mk4.hex mem

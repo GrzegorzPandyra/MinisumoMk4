@@ -1,15 +1,15 @@
-/** @file serial_tx.c
+/** @file UART_TX.c
 *   @brief Implementation of UART transmission 
 */
-#include "serial_tx.h"
+#include "UART_TX.h"
+#include "MCAL.h"
 #include "common_const.h"
-#include <avr/io.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 /* Disable debug logs if AI_DEBUG is not defined during build */
-#ifndef SERIA_TX_DEBUG
+#ifdef UART_TX_DEBUG
     #undef log_info_P
     #define log_info_P(str)
     #undef log_info
@@ -53,7 +53,6 @@ static char *tx_buffer_head = tx_buffer;
 static Data_Target_T data_destination = T_UDR;
 
 /* Local static functions */
-static void to_udr(const unsigned char c);
 static void to_tx_buffer(const char c);
 static void process_char(const unsigned char c);
 static void get_filename_from_path(char *filename, const char *path);
@@ -62,15 +61,6 @@ static void print_msg_type(Log_Type_T msg_type);
 static void print_msg_data(const char *data);
 static void print_line_number(const uint32_t line_num);
 static void show_tx_buffer_overflow_error(void);
-/**
- * @brief Moves character 'c' into UDR (USART Data Register), which equals to sending via UART/USART
- * @param c character to be stored
- */
-static void to_udr(const unsigned char c){
-    while ( !( UCSR0A & (1<<UDRE0)) )
-    ;
-    UDR0 = c;
-}
 
 /**
  * @brief Stores character 'c' in TX buffer
@@ -87,7 +77,7 @@ static void to_tx_buffer(const char c){
 static void process_char(const unsigned char c){
     switch(data_destination){
         case T_UDR:
-            to_udr(c);
+            MCAL_WriteRegister(MCAL_UDR, c);
             break;
         case T_TX_BUFFER:
             if(!serial_is_tx_buffer_full()){
@@ -185,72 +175,14 @@ static void show_tx_buffer_overflow_error(void){
     if(is_buffering_enabled)
         serial_disable_buffering();
     
-    to_udr(NEWLINE_CHAR);
+    MCAL_WriteRegister(MCAL_UDR, NEWLINE_CHAR);
     log_err_P(PROGMEM_TX_BUFFER_OVERFLOW);
     
     if(is_buffering_enabled)
         serial_enable_buffering();
 }
 
-/* Global functions */
-
-/**
- * @brief UART initialization
- * Function writes to appropriate registers to enable communication over UART. Frame format is 8data, 2stop bit.
- * @param f_cpu     MCU clock
- * @param baudrate  Target baudrate
- */
-void serial_init(uint32_t f_cpu, uint32_t baudrate){
-    /* Set baud rate */
-    uint32_t ubrr = f_cpu/(16*baudrate)-1;
-    UBRR0H = (unsigned char)(ubrr>>8);
-    UBRR0L = (unsigned char)ubrr;
-    
-    UCSR0A &= ~(1<<U2X0);
-
-    /* Enable receiver and transmitter */
-    UCSR0B = (1<<RXEN0)|(1<<TXEN0);
-
-    /* UMSEL0n
-        0: Asynchronous 
-        1: Synchrnous
-        2: Reserved
-        3: Master SPI
-    */
-    UCSR0C &= ~((1<<UMSEL00) | (1<<UMSEL01)); 
-
-    /* UPM0n - Parity Mode
-        0: Disabled 
-        1: Reserved
-        2: Even Parity
-        3: Odd Parity
-    */
-    UCSR0C &= ~((1<<UPM00) | (1<<UPM01)); 
-
-    /* UCSZn - Character Size
-        0: 5bit 
-        1: 6bit
-        2: 7bit
-        3: 8bit
-        4-6: Reserved
-        7: 9bit
-    */
-    UCSR0C |= (1<<UCSZ00)|(1<<UCSZ01);
-    
-    /* UCPOLn - Clock polarity
-        0: For asynchrnous mode
-    */
-    UCSR0C &= ~(1<<UCPOL0);
-
-
-
-    /* Enable Rx interrupt */
-    // UCSR0B |= (1<<RXCIE0);
-    
-    /* Clear INT0 flag */
-    // EIFR |= 1<<INTF0;
-}
-
+/* Public functions */
 /**
  * @brief Send string str via serial
  * Prints logs formatted as below:
@@ -302,7 +234,7 @@ void serial_read_tx_buffer(void){
         char *tx_buffer_read_ptr = tx_buffer;
 
         while(tx_buffer_read_ptr < tx_buffer_head){
-            to_udr(*tx_buffer_read_ptr++);
+            MCAL_WriteRegister(MCAL_UDR, *tx_buffer_read_ptr++);
         }
 
         if(serial_is_tx_buffer_full()){
