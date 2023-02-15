@@ -2,7 +2,7 @@
     @brief Starting point of software
 */
 
-#include <avr/io.h>
+// #include <avr/io.h> //to be removed
 #include <avr/interrupt.h>
 #include <stdint.h>
 #include "UART_driver.h"
@@ -17,10 +17,11 @@ int main(){
     /* Initialization */
     // sei();
     UART_init(F_CPU, BAUD);
-    DDRB |= (1<<DDB0);
+    log_info_P(PROGMEM_ECU_INIT);
+    // DDRB |= (1<<DDB0);
     while(1){ 
         _delay_ms(1000);
-        PORTB ^= (1<<PB0);
+        // PORTB ^= (1<<PB0);
 
         log_raw_string("XX");
     }

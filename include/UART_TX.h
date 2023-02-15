@@ -1,7 +1,7 @@
-#ifndef SERIAL_TX_GUARD
-#define SERIAL_TX_GUARD
+#ifndef UART_TX_GUARD
+#define UART_TX_GUARD
 
-/*! @file serial_tx.h
+/*! @file UART_TX.h
     @brief API for serial communication
     Interface file for other components to access serial communication between MCU and PC. 
 */
@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <avr/pgmspace.h>
-#include <serial_progmem.h>
+#include <UART_PROGMEM.h>
 
 /**
  * @brief Describes the type of log being send.
@@ -72,4 +72,4 @@ void serial_enable_buffering(void);
 void serial_read_tx_buffer(void);
 void serial_clear_tx_buffer(void);
 void serial_log_raw_string(const char *str);
-#endif /* SERIAL_TX_GUARD */
+#endif /* UART_TX_GUARD */

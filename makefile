@@ -22,10 +22,10 @@ CFLAGS=-I $(INC_DIR) -Wall -Os -std=c99
 
 #source files list
 SRC_LIST =  $(SRC_DIR)/main.c \
+			$(SRC_DIR)/MCAL.c \
 			$(SRC_DIR)/UART_driver.c \
 			$(SRC_DIR)/UART_TX.c \
-			$(SRC_DIR)/MCAL.c \
-			$(SRC_DIR)/serial_progmem.c \
+			$(SRC_DIR)/UART_PROGMEM.c \
 			# $(SRC_DIR)/serial_rx.c \
 			# $(SRC_DIR)/ICCM.c \
 			# $(SRC_DIR)/distance_sensor.c \

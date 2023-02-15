@@ -32,3 +32,7 @@ void MCAL_SetBit(Register_T reg, uint8_t bit, uint8_t val){
         *reg |= (1<<bit);
     }
 }
+
+uint8_t MCAL_GetBit(Register_T reg, uint8_t bit){
+    return 0;
+}
