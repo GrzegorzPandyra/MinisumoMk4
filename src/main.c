@@ -6,6 +6,7 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
 #include "UART_driver.h"
+#include "motor_drv.h"
 #include "ISR.h"
 #include "config.h"
 #include <util/delay.h>
@@ -18,8 +19,12 @@ int main(){
     // sei();
     UART_init(F_CPU, BAUD);
     log_info_P(PROGMEM_ECU_INIT);
+    MDRV_init();
     // DDRB |= (1<<DDB0);
     while(1){ 
+        MDRV_forward();
+        _delay_ms(1000);
+        MDRV_backward();
         _delay_ms(1000);
         // PORTB ^= (1<<PB0);
 

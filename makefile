@@ -26,8 +26,8 @@ SRC_LIST =  $(SRC_DIR)/main.c \
 			$(SRC_DIR)/UART_driver.c \
 			$(SRC_DIR)/UART_TX.c \
 			$(SRC_DIR)/UART_PROGMEM.c \
+			$(SRC_DIR)/motor_drv.c \
 			# $(SRC_DIR)/serial_rx.c \
-			# $(SRC_DIR)/ICCM.c \
 			# $(SRC_DIR)/distance_sensor.c \
 			# $(SRC_DIR)/line_sensor.c \
 			# $(SRC_DIR)/ADC.c \
