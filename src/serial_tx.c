@@ -67,9 +67,9 @@ static void show_tx_buffer_overflow_error(void);
  * @param c character to be stored
  */
 static void to_udr(const unsigned char c){
-    while ( !( UCSRA & (1<<UDRE)) )
+    while ( !( UCSR0A & (1<<UDRE0)) )
     ;
-    UDR = c;
+    UDR0 = c;
 }
 
 /**
@@ -203,20 +203,52 @@ static void show_tx_buffer_overflow_error(void){
 void serial_init(uint32_t f_cpu, uint32_t baudrate){
     /* Set baud rate */
     uint32_t ubrr = f_cpu/(16*baudrate)-1;
-    UBRRH = (unsigned char)(ubrr>>8);
-    UBRRL = (unsigned char)ubrr;
+    UBRR0H = (unsigned char)(ubrr>>8);
+    UBRR0L = (unsigned char)ubrr;
+    
+    UCSR0A &= ~(1<<U2X0);
 
     /* Enable receiver and transmitter */
-    UCSRB = (1<<RXEN)|(1<<TXEN);
+    UCSR0B = (1<<RXEN0)|(1<<TXEN0);
 
-    /* Set frame format: 8data, 2stop bit */
-    UCSRC = (1<<URSEL)|(1<<USBS)|(1<<UCSZ0)|(1<<UCSZ1);
+    /* UMSEL0n
+        0: Asynchronous 
+        1: Synchrnous
+        2: Reserved
+        3: Master SPI
+    */
+    UCSR0C &= ~((1<<UMSEL00) | (1<<UMSEL01)); 
+
+    /* UPM0n - Parity Mode
+        0: Disabled 
+        1: Reserved
+        2: Even Parity
+        3: Odd Parity
+    */
+    UCSR0C &= ~((1<<UPM00) | (1<<UPM01)); 
+
+    /* UCSZn - Character Size
+        0: 5bit 
+        1: 6bit
+        2: 7bit
+        3: 8bit
+        4-6: Reserved
+        7: 9bit
+    */
+    UCSR0C |= (1<<UCSZ00)|(1<<UCSZ01);
+    
+    /* UCPOLn - Clock polarity
+        0: For asynchrnous mode
+    */
+    UCSR0C &= ~(1<<UCPOL0);
+
+
 
     /* Enable Rx interrupt */
-    UCSRB |= (1<<RXCIE);
+    // UCSR0B |= (1<<RXCIE0);
     
     /* Clear INT0 flag */
-    GIFR |= 1<<INTF0;
+    // EIFR |= 1<<INTF0;
 }
 
 /**

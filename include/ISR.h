@@ -67,10 +67,10 @@
      * @brief Interrupt routine for USART receive complete bit
      * Reads a single character from UDR and calls function handle this data
      */
-    ISR(USART_RXC_vect){
-        char c = (char)UDR;
-        serial_on_receive(c);
-    }
+    // ISR(USART_RXC_vect){
+    //     char c = (char)UDR0;
+    //     serial_on_receive(c);
+    // }
 
     
 #endif /* ISR_GUARD */

@@ -1,1 +1,1 @@
-avrdude -p atmega8 -c usbasp -P usb  -B 1 -V  -U flash:w:"C:\Users\gpand\Dropbox\PROJECTS\P20_MINISUMO_MK4\sw\repo\out\minisumo_mk4.hex":i
+avrdude -p m328p -c usbasp -P usb  -B 4 -V  -U flash:w:"C:\Users\gpand\Dropbox\PROJECTS\P20_MINISUMO_MK4\sw\repo\out\minisumo_mk4.hex":i

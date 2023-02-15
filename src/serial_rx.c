@@ -100,9 +100,9 @@ static const Cmd_Record_T* find_cmd(const char *cmd){
  * @param c Char to be send
  */
 static void to_udr(const unsigned char c){
-    while ( !( UCSRA & (1<<UDRE)) )
+    while ( !( UCSR0A & (1<<UDRE0)) )
     ;
-    UDR = c;
+    UDR0 = c;
 }
 
 /* Global functions */

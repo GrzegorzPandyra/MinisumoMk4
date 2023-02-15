@@ -4,7 +4,6 @@
 
 #define F_CPU 16000000L
 #define BAUD 9600
-#define MYUBRR F_CPU/16/BAUD-1
 
 // #if 0
 /* Inter-Chip Communication Manager setup*/

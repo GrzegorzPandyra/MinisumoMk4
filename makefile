@@ -10,7 +10,7 @@ SRC_DIR=src
 
 #compiler
 CC=avr-gcc
-MMCU=atmega8
+MMCU=atmega328P
 CFLAGS=-I $(INC_DIR) -Wall -Os -std=c99
 
 # [target]:[prerequisites]
@@ -23,8 +23,8 @@ CFLAGS=-I $(INC_DIR) -Wall -Os -std=c99
 #source files list
 SRC_LIST =  $(SRC_DIR)/main.c \
 			$(SRC_DIR)/serial_tx.c \
-			$(SRC_DIR)/serial_rx.c \
 			$(SRC_DIR)/serial_progmem.c \
+			# $(SRC_DIR)/serial_rx.c \
 			# $(SRC_DIR)/ICCM.c \
 			# $(SRC_DIR)/distance_sensor.c \
 			# $(SRC_DIR)/line_sensor.c \
