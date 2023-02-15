@@ -20,9 +20,7 @@ int main(){
     DDRB |= (1<<DDB0);
     while(1){ 
         _delay_ms(1000);
-        PORTB |= (1<<PB0);
-        _delay_ms(1000);
-        PORTB &= ~(1<<PB0);
+        PORTB ^= (1<<PB0);
 
         log_raw_string("XX");
     }
