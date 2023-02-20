@@ -10,6 +10,7 @@
 #include "ISR.h"
 #include "config.h"
 #include <util/delay.h>
+#include "I2C.h"
 
 /**
  * @brief Main function
@@ -20,15 +21,20 @@ int main(){
     UART_init(F_CPU, BAUD);
     log_info_P(PROGMEM_ECU_INIT);
     MDRV_init();
+    I2C_init();
     // DDRB |= (1<<DDB0);
+    uint8_t data[] = {0x00};
     while(1){ 
         MDRV_forward();
         _delay_ms(1000);
+        data[0] = 0x00;
+        I2C_send(data, sizeof(data));
         MDRV_backward();
         _delay_ms(1000);
         // PORTB ^= (1<<PB0);
-
-        log_raw_string("XX");
+        data[0] = 0xff;
+        I2C_send(data, sizeof(data));
+        // log_raw_string("XX");
     }
     return 0;
 }

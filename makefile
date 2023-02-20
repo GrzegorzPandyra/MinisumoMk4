@@ -5,13 +5,9 @@
 #folders
 INC_DIR=include
 OUT_DIR=out
-# LIB_DIR=lib
+LIB_DIR=lib
 SRC_DIR=src
 
-#compiler
-CC=avr-gcc
-MMCU=atmega328P
-CFLAGS=-I $(INC_DIR) -Wall -Os -std=c99
 
 # [target]:[prerequisites]
 #	[recipe]
@@ -27,14 +23,17 @@ SRC_LIST =  $(SRC_DIR)/main.c \
 			$(SRC_DIR)/UART_TX.c \
 			$(SRC_DIR)/UART_PROGMEM.c \
 			$(SRC_DIR)/motor_drv.c \
-			# $(SRC_DIR)/serial_rx.c \
-			# $(SRC_DIR)/distance_sensor.c \
-			# $(SRC_DIR)/line_sensor.c \
-			# $(SRC_DIR)/ADC.c \
-			# $(SRC_DIR)/AI.c \
+			$(SRC_DIR)/I2C.c \
+			$(LIB_DIR)/avr_i2c/twi/twi_master.c \
+
+CUST_INC =  $(LIB_DIR)/avr_i2c/twi/
 
 DEFINES = 	-D DUMMY_DEFINE_1 \
 			-D UART_TX_DEBUG \
+#compiler
+CC=avr-gcc
+MMCU=atmega328P
+CFLAGS=-I $(INC_DIR) -I $(CUST_INC) -Wall -Os -std=c99 -mmcu=$(MMCU)
 
 #make all rule
 all: minisumo_mk4.elf minisumo_mk4.hex mem
@@ -59,7 +58,7 @@ all: minisumo_mk4.elf minisumo_mk4.hex mem
 minisumo_mk4.elf: 
 	@echo ' ********************************************************************************************************* '
 	@echo 'Building target: $@.. '
-	$(CC) $(SRC_LIST) $(CFLAGS) $(DEFINES) -mmcu=$(MMCU) -o $(OUT_DIR)/$@
+	$(CC) $(SRC_LIST) $(CFLAGS) $(DEFINES) -o $(OUT_DIR)/$@
 	@echo 'Finished building target: $@'
 	@echo ' ********************************************************************************************************* '
 	@echo ' '

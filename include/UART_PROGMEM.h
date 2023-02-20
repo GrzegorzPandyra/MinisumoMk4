@@ -7,7 +7,8 @@
     /** Indexes related to strings stored in progmem_string_table */                                                                                            
     typedef enum Progmem_Table_Index_Tag{
         PROGMEM_ECU_INIT = 0,
-        PROGMEM_MDRV_INIT
+        PROGMEM_MDRV_INIT,
+        PROGMEM_I2C_INIT,
     } Progmem_Table_Index_T;
 
     /* Global variables */
