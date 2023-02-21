@@ -6,7 +6,6 @@
 */
 
 #include "twi_master.h"
-#include "UART_TX.h"
 
 static ret_code_t tw_start(void)
 {
@@ -51,7 +50,6 @@ static ret_code_t tw_write_sla(uint8_t sla)
 #if DEBUG_LOG
 	printf(BG "Write SLA + R/W: 0x%02X..." RESET, sla);
 #endif
-	log_data_1("SLA : 0x%x", sla);
 	TWDR = sla;
 	TWCR = (1 << TWINT) | (1 << TWEN);
 	
@@ -62,7 +60,6 @@ static ret_code_t tw_write_sla(uint8_t sla)
 #if DEBUG_LOG
 		printf("\n");
 #endif
-		log_data_1("WRONG TW_STATUS: 0x%x", TW_STATUS);
 		return TW_STATUS;
 	}
 
@@ -171,23 +168,19 @@ void tw_init(twi_freq_mode_t twi_freq_mode, bool pullup_en)
 ret_code_t tw_master_transmit(uint8_t slave_addr, uint8_t* p_data, uint8_t len, bool repeat_start)
 {
 	ret_code_t error_code;
-	log_info("git");
 	/* Send START condition */
 	error_code = tw_start();
 	if (error_code != SUCCESS)
 	{
-		log_data_1("Error - 0x%x", error_code);
 		return error_code;
 	}
 	
 	/* Send slave address with WRITE flag */
-	error_code = tw_write_sla(TW_SLA_W(slave_addr));
+	error_code = tw_write_sla(slave_addr);
 	if (error_code != SUCCESS)
 	{
-		log_data_1("Error 2 - 0x%x", error_code);
 		return error_code;
 	}
-	log_info("git2");
 	
 	/* Send data byte in single or burst mode */
 	for (int i = 0; i < len; ++i)
@@ -195,7 +188,6 @@ ret_code_t tw_master_transmit(uint8_t slave_addr, uint8_t* p_data, uint8_t len, 
 		error_code = tw_write(p_data[i]);
 		if (error_code != SUCCESS)
 		{
-			log_data_1("Error 3 - 0x%x", error_code);
 			return error_code;
 		}
 	}
@@ -205,7 +197,6 @@ ret_code_t tw_master_transmit(uint8_t slave_addr, uint8_t* p_data, uint8_t len, 
 		/* Send STOP condition */
 		tw_stop();
 	}
-	log_info("SUCCESS");
 	return SUCCESS;
 }
 
@@ -222,7 +213,7 @@ ret_code_t tw_master_receive(uint8_t slave_addr, uint8_t* p_data, uint8_t len)
 	}
 	
 	/* Write slave address with READ flag */
-	error_code = tw_write_sla(TW_SLA_R(slave_addr));
+	error_code = tw_write_sla(slave_addr);
 	if (error_code != SUCCESS)
 	{
 		return error_code;

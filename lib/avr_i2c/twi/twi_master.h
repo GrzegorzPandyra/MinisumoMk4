@@ -19,8 +19,6 @@
 #define TW_SCL_PIN			PORTC5
 #define TW_SDA_PIN			PORTC4
 
-#define TW_SLA_W(ADDR)		((ADDR << 1) | TW_WRITE)
-#define TW_SLA_R(ADDR)		((ADDR << 1) | TW_READ)
 #define TW_READ_ACK			1
 #define TW_READ_NACK		0
 
