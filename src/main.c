@@ -22,7 +22,6 @@ int main(){
     log_info_P(PROGMEM_ECU_INIT);
     MDRV_init();
     I2C_init();
-    // DDRB |= (1<<DDB0);
     uint8_t data[] = {0x00};
     while(1){ 
         MDRV_forward();
@@ -31,10 +30,8 @@ int main(){
         I2C_send(data, sizeof(data));
         MDRV_backward();
         _delay_ms(1000);
-        // PORTB ^= (1<<PB0);
         data[0] = 0xff;
         I2C_send(data, sizeof(data));
-        // log_raw_string("XX");
     }
     return 0;
 }

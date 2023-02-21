@@ -1,13 +1,14 @@
 /** @file I2C.c
-*   @brief 
+*   @brief Higher level component for TWI lib
 */
 #include <avr/io.h>
-#include "MCAL.h"
 #include "twi_master.h"
 #include "UART_TX.h"
 
+/* See datasheet PCF8574 8.3.3*/
 #define PCF8574N_I2C_WRITE_ADDR 0x42
 #define PCF8574N_I2C_READ_ADDR 0x43
+
 #define SINGLE_BYTE 1
 /* Public functions */
 /**
