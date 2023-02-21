@@ -23,6 +23,7 @@ SRC_LIST =  $(SRC_DIR)/main.c \
 			$(SRC_DIR)/UART_TX.c \
 			$(SRC_DIR)/UART_PROGMEM.c \
 			$(SRC_DIR)/motor_drv.c \
+			$(SRC_DIR)/line_sensor_drv.c \
 			$(SRC_DIR)/I2C.c \
 			$(LIB_DIR)/avr_i2c/twi/twi_master.c \
 

@@ -18,42 +18,42 @@
 // #include <util/delay.h>
 
 /* Set of functions to combine wheel movements into robot movement*/
-void MDRV_stop(void){
+void MDRV_Stop(void){
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1A, BIT_CLEARED);
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1B, BIT_CLEARED);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2A, BIT_CLEARED);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2B, BIT_CLEARED);
 }
 
-void MDRV_forward(void){
+void MDRV_Forward(void){
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1A, BIT_SET);
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1B, BIT_CLEARED);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2A, BIT_SET);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2B, BIT_CLEARED);
 }
 
-void MDRV_backward(void){
+void MDRV_Backward(void){
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1A, BIT_CLEARED);
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1B, BIT_SET);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2A, BIT_CLEARED);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2B, BIT_SET);
 }
 
-void MDRV_turn_right(void){
+void MDRV_TurnRight(void){
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1A, BIT_SET);
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1B, BIT_CLEARED);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2A, BIT_CLEARED);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2B, BIT_SET);
 }
 
-void MDRV_turn_left(void){
+void MDRV_TurnLeft(void){
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1A, BIT_CLEARED);
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1B, BIT_SET);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2A, BIT_SET);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2B, BIT_CLEARED);
 }
 
-void MDRV_init(void){
+void MDRV_Init(void){
     log_info_P(PROGMEM_MDRV_INIT);
 }
 

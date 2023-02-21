@@ -9,6 +9,7 @@
         PROGMEM_ECU_INIT = 0,
         PROGMEM_MDRV_INIT,
         PROGMEM_I2C_INIT,
+        PROGMEM_LSD_INIT,
     } Progmem_Table_Index_T;
 
     /* Global variables */

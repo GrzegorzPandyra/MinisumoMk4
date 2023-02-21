@@ -12,7 +12,7 @@
  * @param baudrate  Target baudrate
  */
 
-void UART_init(uint32_t f_cpu, uint32_t baudrate){
+void UART_Init(uint32_t f_cpu, uint32_t baudrate){
     /* Set baud rate */
     uint32_t ubrr = f_cpu/(16*baudrate)-1;
     MCAL_WriteRegister((Register_T)&UBRR0H, (unsigned char)(ubrr>>8));

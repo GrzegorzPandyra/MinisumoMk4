@@ -12,11 +12,11 @@
 #define MCTRL_2A PD2
 #define MCTRL_2B PD3
 
-void MDRV_init(void);
-void MDRV_forward(void);
-void MDRV_backward(void);
-void MDRV_turn_right(void);
-void MDRV_turn_left(void);
+void MDRV_Init(void);
+void MDRV_Forward(void);
+void MDRV_Backward(void);
+void MDRV_TurnRight(void);
+void MDRV_TurnLeft(void);
 #endif /* MOTOR_DRV_GUARD */
 
 
