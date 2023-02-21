@@ -6,6 +6,9 @@
 #include "twi_master.h"
 #include "UART_TX.h"
 
+#define PCF8574N_I2C_WRITE_ADDR 0x42
+#define PCF8574N_I2C_READ_ADDR 0x43
+#define SINGLE_BYTE 1
 /* Public functions */
 /**
  * @brief I2C initialization
@@ -16,12 +19,14 @@ void I2C_init(){
     log_info_P(PROGMEM_I2C_INIT);
 }
 
-void I2C_send(uint8_t *data, uint8_t len){
-    uint8_t ret_code = 0xff;
-    ret_code = tw_master_transmit(0x42, data, len, false);
-    log_data_3("retcode: 0x%x data: 0x%x len: %d\n", ret_code, *data, len);   
-    // uint8_t response = 22;
-    // ret_code = tw_master_receive(0x43, (uint8_t*)&response, 1);
-    // log_data_1("PinStatus: %d", response);   
-    // log_data_1("retcode: %d\n", ret_code);   
+uint8_t I2C_send(uint8_t *data, uint8_t len){
+    uint8_t ret_code;
+    ret_code = tw_master_transmit(PCF8574N_I2C_WRITE_ADDR, data, len, false);
+    return ret_code;
+}
+
+uint8_t I2C_receive(uint8_t* response){
+    uint8_t ret_code;
+    ret_code = tw_master_receive(PCF8574N_I2C_READ_ADDR, response, SINGLE_BYTE);
+    return ret_code;
 }

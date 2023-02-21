@@ -6,5 +6,6 @@
 */
 
 void I2C_init();
-void I2C_send(uint8_t *data, uint8_t len);
+uint8_t I2C_send(uint8_t *data, uint8_t len);
+uint8_t I2C_receive(uint8_t* response);
 #endif /* #define I2C_GUARD */
