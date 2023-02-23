@@ -47,10 +47,8 @@ uint16_t DSD_GetDistance(void){
     @return none
 */
 void DSD_ConversionCallback(){
-    // log_info("!");
-    volatile uint32_t val = ADC; //(1<<ADCH)|ADCL;
-    // val = val*1024/0x3ff;
-    *ds_sensor.sample_ptr = val;
+    volatile uint16_t adc_value = MCAL_ReadRegister16((Register16_T)&ADC);
+    *ds_sensor.sample_ptr = adc_value;
 
     if(ds_sensor.sample_ptr == &(ds_sensor.samples[MAX_NUM_SAMPLES-1])){
         ds_sensor.sample_ptr = ds_sensor.samples;

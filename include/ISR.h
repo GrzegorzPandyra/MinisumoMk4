@@ -14,7 +14,6 @@
      * @brief Interrupt routine executed when ADC completes conversion
      */
     ISR(ADC_vect){  
-        // volatile uint16_t adc_val = ADCW;
         DSD_ConversionCallback();
     }
 

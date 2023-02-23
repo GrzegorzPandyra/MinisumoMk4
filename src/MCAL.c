@@ -20,6 +20,14 @@ uint8_t MCAL_ReadRegister(Register_T reg){
     return *reg;
 } 
 
+/** @brief Read 16bit register
+    @param reg Register address
+    @return Register value
+*/
+uint16_t MCAL_ReadRegister16(Register16_T reg){
+    return *reg;
+} 
+
 /** @brief Write single bit into a register
     @param reg Register address
     @param bit Bit ID
