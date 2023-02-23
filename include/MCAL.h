@@ -2,6 +2,7 @@
 #ifndef MCAL_GUARD
 #define MCAL_GUARD
 #include <stdint.h>
+#include <avr/io.h>
 
 #define BIT_SET 1
 #define BIT_CLEARED 0

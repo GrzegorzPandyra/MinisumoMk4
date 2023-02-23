@@ -24,7 +24,10 @@ SRC_LIST =  $(SRC_DIR)/main.c \
 			$(SRC_DIR)/UART_PROGMEM.c \
 			$(SRC_DIR)/motor_drv.c \
 			$(SRC_DIR)/line_sensor_drv.c \
+			$(SRC_DIR)/distance_sensor_drv.c \
 			$(SRC_DIR)/I2C.c \
+			$(SRC_DIR)/ADC.c \
+			$(SRC_DIR)/timer.c \
 			$(LIB_DIR)/avr_i2c/twi/twi_master.c \
 
 CUST_INC =  $(LIB_DIR)/avr_i2c/twi/

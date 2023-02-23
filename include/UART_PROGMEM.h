@@ -10,6 +10,9 @@
         PROGMEM_MDRV_INIT,
         PROGMEM_I2C_INIT,
         PROGMEM_LSD_INIT,
+        PROGMEM_DSD_INIT,
+        PROGMEM_ADC_INIT,
+        PROGMEM_TIMER_INIT,
     } Progmem_Table_Index_T;
 
     /* Global variables */

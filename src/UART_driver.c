@@ -1,7 +1,6 @@
 /** @file UART_driver.c
 *   @brief Implementation of UART low level functionalities 
 */
-#include <avr/io.h>
 #include "MCAL.h"
 
 /* Public functions */
