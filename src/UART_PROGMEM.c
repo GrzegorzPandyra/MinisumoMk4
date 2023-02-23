@@ -6,14 +6,15 @@
 
 #define DATA_CONVERSION_BUFFER_SIZE 30
 
-/* Literals kept in codeflash for logging      0|                             |29*/
-static const char PROGMEM_ECU_INIT[]  PROGMEM = "ECU init";
-static const char PROGMEM_MDRV_INIT[] PROGMEM = "Motor drv init";
-static const char PROGMEM_I2C_INIT[]  PROGMEM = "I2C init";
-static const char PROGMEM_LSD_INIT[]  PROGMEM = "Line sensor drv init";
-static const char PROGMEM_DSD_INIT[]  PROGMEM = "Distance sensor drv init";
-static const char PROGMEM_ADC_INIT[]  PROGMEM = "ADC init";
-static const char PROGMEM_TIMER_INIT[]  PROGMEM = "Timer init";
+/* Literals kept in codeflash for logging       0|                             |29*/
+static const char PROGMEM_ECU_INIT[]   PROGMEM = "ECU init";
+static const char PROGMEM_MDRV_INIT[]  PROGMEM = "Motor drv init";
+static const char PROGMEM_I2C_INIT[]   PROGMEM = "I2C init";
+static const char PROGMEM_LSD_INIT[]   PROGMEM = "Line sensor drv init";
+static const char PROGMEM_DSD_INIT[]   PROGMEM = "Distance sensor drv init";
+static const char PROGMEM_ADC_INIT[]   PROGMEM = "ADC init";
+static const char PROGMEM_TIMER_INIT[] PROGMEM = "Timer init";
+static const char PROGMEM_CSD_INIT[]   PROGMEM = "CSD init";
 
 
 /* Buffer used for data exchange between RAM and FLASH */
@@ -27,5 +28,6 @@ const char* const progmem_string_table[] PROGMEM = {
     PROGMEM_LSD_INIT,
     PROGMEM_DSD_INIT,
     PROGMEM_ADC_INIT,
-    PROGMEM_TIMER_INIT
+    PROGMEM_TIMER_INIT,
+    PROGMEM_CSD_INIT
 };

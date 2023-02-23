@@ -15,6 +15,7 @@
 #include "distance_sensor_drv.h"
 #include "ADC.h"
 #include "timer.h"
+#include "collision_sensor_drv.h"
 
 /**
  * @brief Main function
@@ -30,6 +31,7 @@ int main(){
     ADC_Init();
     Timer_Init();
     DSD_Init();
+    CSD_Init();
     // uint8_t data[] = {0x00};
     while(1){ 
         // MDRV_Forward();

@@ -13,6 +13,7 @@
         PROGMEM_DSD_INIT,
         PROGMEM_ADC_INIT,
         PROGMEM_TIMER_INIT,
+        PROGMEM_CSD_INIT,
     } Progmem_Table_Index_T;
 
     /* Global variables */

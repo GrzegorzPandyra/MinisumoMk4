@@ -24,6 +24,7 @@ SRC_LIST =  $(SRC_DIR)/main.c \
 			$(SRC_DIR)/UART_PROGMEM.c \
 			$(SRC_DIR)/motor_drv.c \
 			$(SRC_DIR)/line_sensor_drv.c \
+			$(SRC_DIR)/collision_sensor_drv.c \
 			$(SRC_DIR)/distance_sensor_drv.c \
 			$(SRC_DIR)/I2C.c \
 			$(SRC_DIR)/ADC.c \

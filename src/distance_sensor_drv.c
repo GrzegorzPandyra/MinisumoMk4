@@ -43,7 +43,6 @@ uint16_t DSD_GetDistance(void){
 }
 
 /** @brief Write new value to sensor buffer. Called in ISR when ADC conversion is finished.
-    @param val New value from ADC
     @return none
 */
 void DSD_ConversionCallback(){
