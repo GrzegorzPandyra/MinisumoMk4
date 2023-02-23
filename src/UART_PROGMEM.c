@@ -15,6 +15,7 @@ static const char PROGMEM_DSD_INIT[]   PROGMEM = "Distance sensor drv init";
 static const char PROGMEM_ADC_INIT[]   PROGMEM = "ADC init";
 static const char PROGMEM_TIMER_INIT[] PROGMEM = "Timer init";
 static const char PROGMEM_CSD_INIT[]   PROGMEM = "CSD init";
+static const char PROGMEM_LM_INIT[]    PROGMEM = "LM init";
 
 
 /* Buffer used for data exchange between RAM and FLASH */
@@ -29,5 +30,6 @@ const char* const progmem_string_table[] PROGMEM = {
     PROGMEM_DSD_INIT,
     PROGMEM_ADC_INIT,
     PROGMEM_TIMER_INIT,
-    PROGMEM_CSD_INIT
+    PROGMEM_CSD_INIT,
+    PROGMEM_LM_INIT
 };
