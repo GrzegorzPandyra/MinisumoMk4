@@ -2,7 +2,6 @@
     @brief Starting point of software
 */
 
-// #include <avr/io.h> //to be removed
 #include <avr/interrupt.h>
 #include <stdint.h>
 #include "UART_DRV.h"
@@ -16,6 +15,7 @@
 #include "ADC.h"
 #include "TMR.h"
 #include "CSD_CollisionSensorDrv.h"
+#include "LM_LogicModule.h"
 
 /**
  * @brief Main function
@@ -32,8 +32,9 @@ int main(){
     Timer_Init();
     DSD_Init();
     CSD_Init();
-    // uint8_t data[] = {0x00};
+    LM_Init();
     while(1){ 
+        LM_Run();
         // MDRV_Forward();
         // _delay_ms(1000);
         // data[0] = 0x00;
