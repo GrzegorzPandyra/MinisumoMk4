@@ -3,7 +3,7 @@
 */
 #include "MCAL.h"
 #include "UART_TX.h"
-#include "distance_sensor_drv.h"
+#include "DSD_DistanceSensorDrv.h"
 
 #define MAX_NUM_SAMPLES 5
 #define DS_PIN PC0

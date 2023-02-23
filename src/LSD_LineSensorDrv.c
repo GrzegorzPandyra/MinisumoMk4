@@ -2,7 +2,7 @@
 *   @brief Implementation of line sensor
 */
 #include "UART_TX.h"
-#include "line_sensor_drv.h"
+#include "LSD_LineSensorDrv.h"
 #include "I2C.h"
 
 /** @brief Initialize the module

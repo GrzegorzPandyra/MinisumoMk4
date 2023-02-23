@@ -5,17 +5,17 @@
 // #include <avr/io.h> //to be removed
 #include <avr/interrupt.h>
 #include <stdint.h>
-#include "UART_driver.h"
-#include "motor_drv.h"
+#include "UART_DRV.h"
+#include "MD_MotorDrv.h"
 #include "ISR.h"
 #include "config.h"
 #include <util/delay.h>
 #include "I2C.h"
-#include "line_sensor_drv.h"
-#include "distance_sensor_drv.h"
+#include "LSD_LineSensorDrv.h"
+#include "DSD_DistanceSensorDrv.h"
 #include "ADC.h"
-#include "timer.h"
-#include "collision_sensor_drv.h"
+#include "TMR.h"
+#include "CSD_CollisionSensorDrv.h"
 
 /**
  * @brief Main function

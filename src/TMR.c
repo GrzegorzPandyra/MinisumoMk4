@@ -2,7 +2,7 @@
     @brief timer implementation
 */
 #include "MCAL.h"
-#include "timer.h"
+#include "TMR.h"
 #include "UART_TX.h"
 
 void Timer_Init(void){

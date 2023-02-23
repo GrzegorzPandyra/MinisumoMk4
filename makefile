@@ -19,16 +19,16 @@ SRC_DIR=src
 #source files list
 SRC_LIST =  $(SRC_DIR)/main.c \
 			$(SRC_DIR)/MCAL.c \
-			$(SRC_DIR)/UART_driver.c \
+			$(SRC_DIR)/UART_DRV.c \
 			$(SRC_DIR)/UART_TX.c \
 			$(SRC_DIR)/UART_PROGMEM.c \
-			$(SRC_DIR)/motor_drv.c \
-			$(SRC_DIR)/line_sensor_drv.c \
-			$(SRC_DIR)/collision_sensor_drv.c \
-			$(SRC_DIR)/distance_sensor_drv.c \
+			$(SRC_DIR)/MD_MotorDrv.c \
+			$(SRC_DIR)/LSD_LineSensorDrv.c \
+			$(SRC_DIR)/CSD_CollisionSensorDrv.c \
+			$(SRC_DIR)/DSD_DistanceSensorDrv.c \
 			$(SRC_DIR)/I2C.c \
 			$(SRC_DIR)/ADC.c \
-			$(SRC_DIR)/timer.c \
+			$(SRC_DIR)/TMR.c \
 			$(SRC_DIR)/LM_LogicModule.c \
 			$(LIB_DIR)/avr_i2c/twi/twi_master.c \
 
