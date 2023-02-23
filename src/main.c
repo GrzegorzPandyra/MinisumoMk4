@@ -16,6 +16,7 @@
 #include "TMR.h"
 #include "CSD_CollisionSensorDrv.h"
 #include "LM_LogicModule.h"
+#include "UIM_UserInputModule.h"
 
 /**
  * @brief Main function
@@ -32,6 +33,7 @@ int main(){
     Timer_Init();
     DSD_Init();
     CSD_Init();
+    UIM_Init();
     LM_Init();
     while(1){ 
         LM_Run();

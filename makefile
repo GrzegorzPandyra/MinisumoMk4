@@ -30,6 +30,7 @@ SRC_LIST =  $(SRC_DIR)/main.c \
 			$(SRC_DIR)/ADC.c \
 			$(SRC_DIR)/TMR.c \
 			$(SRC_DIR)/LM_LogicModule.c \
+			$(SRC_DIR)/UIM_UserInputModule.c \
 			$(LIB_DIR)/avr_i2c/twi/twi_master.c \
 
 CUST_INC =  $(LIB_DIR)/avr_i2c/twi/
