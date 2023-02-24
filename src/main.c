@@ -47,9 +47,9 @@ int main(){
         // I2C_Send(data, sizeof(data));
 
         _delay_ms(500);
-        uint16_t distance = 0;
-        distance = DSD_GetDistance();
-        log_data_1("Distance = %d", distance);
+        // uint16_t distance = 0;
+        // distance = DSD_GetDistance();
+        // log_data_1("Distance = %d", distance);
     }
     return 0;
 }

@@ -37,7 +37,7 @@ uint8_t UIM_GetMode(void)
  * @brief Return state of start btn
  * @return uint8_t start btn status
  */
-uint8_t UIM_GetStartBtnState(void)
+Btn_State_T UIM_GetStartBtnState(void)
 {
     return MCAL_GetBit((Register_T)&PIND, START_BTN);
 }

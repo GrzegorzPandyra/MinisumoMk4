@@ -20,8 +20,16 @@ void CSD_Init(void){
             0: sensor idle
             1: sensor triggered
 */
-uint8_t CSD_GetCollisionStatus(void){
+CollisionStatus_T CSD_GetCollisionStatus(void){
+    CollisionStatus_T status = NO_COLLISION;
     uint8_t cs1_status = MCAL_GetBit((Register_T)&PORTB, CS1);
     uint8_t cs2_status = MCAL_GetBit((Register_T)&PORTB, CS2);
-    return ((cs2_status<<1) | cs1_status);
+    if(cs1_status){
+        status = FRONT_COLLISION;
+    } else if (cs2_status > 0)
+    {
+        status = REAR_COLLISION;
+    }
+    
+    return status;
 }
