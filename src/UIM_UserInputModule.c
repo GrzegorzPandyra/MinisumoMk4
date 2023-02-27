@@ -16,9 +16,14 @@
 /** @brief Initialize the module
 */
 void UIM_Init(void){
+    /* Set pins as inputs */
     MCAL_SetBit((Register_T)&DDRD, MODE_SELECT_H, BIT_CLEARED);
     MCAL_SetBit((Register_T)&DDRD, MODE_SELECT_L, BIT_CLEARED);
     MCAL_SetBit((Register_T)&DDRD, START_BTN, BIT_CLEARED);
+    /* Pull-ups */
+    MCAL_SetBit((Register_T)&PORTD, MODE_SELECT_H, BIT_SET);
+    MCAL_SetBit((Register_T)&PORTD, MODE_SELECT_L, BIT_SET);
+    MCAL_SetBit((Register_T)&PORTD, START_BTN, BIT_SET);
     log_info_P(PROGMEM_UIM_INIT);
 }
 
@@ -39,5 +44,6 @@ uint8_t UIM_GetMode(void)
  */
 Btn_State_T UIM_GetStartBtnState(void)
 {
+    log_data_1("startbtn %d", MCAL_GetBit((Register_T)&PIND, START_BTN));
     return MCAL_GetBit((Register_T)&PIND, START_BTN);
 }

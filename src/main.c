@@ -43,13 +43,12 @@ int main(){
         // I2C_Send(data, sizeof(data));
         // MDRV_Backward();
         // _delay_ms(1000);
-        // data[0] = 0xff;
-        // I2C_Send(data, sizeof(data));
 
         _delay_ms(500);
         // uint16_t distance = 0;
         // distance = DSD_GetDistance();
         // log_data_1("Distance = %d", distance);
+        // log_data_1("Mode = %d", UIM_GetMode());
     }
     return 0;
 }

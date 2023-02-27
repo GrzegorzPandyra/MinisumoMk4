@@ -9,6 +9,7 @@
 #define PCF8574N_I2C_WRITE_ADDR 0x42
 #define PCF8574N_I2C_READ_ADDR 0x43
 
+#define I2C_INIT_VALUE 0xFF
 #define SINGLE_BYTE 1
 /* Public functions */
 /**
@@ -16,7 +17,9 @@
  */
 
 void I2C_Init(){
+    uint8_t init_value = I2C_INIT_VALUE;
     tw_init(TW_FREQ_100K, true);
+    tw_master_transmit(PCF8574N_I2C_WRITE_ADDR, &init_value, sizeof(init_value), false);
     log_info_P(PROGMEM_I2C_INIT);
 }
 

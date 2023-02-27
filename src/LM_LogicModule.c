@@ -41,6 +41,9 @@ typedef struct Minisumo_Tag{
 
 static Minisumo_T minisumo = {LM_INIT, ARMED_CNT_TOP, 0, FORWARD, {0, NO_COLLISION, 0}};
 
+static void SensorCheck(void);
+static void ClearSensorState(void);
+static void StateTransition(LM_State_T state);
 /*****************************************************
  * Private functions
  *****************************************************/
@@ -49,13 +52,14 @@ static void SensorCheck(void){
     CollisionStatus_T collision_sensor_status = CSD_GetCollisionStatus();
     uint8_t distance_sensor_status = DSD_GetDistance();
     if(line_sensor_status > 0){
-        minisumo.LM_state = LM_LINE_DETECTED;
+        StateTransition(LM_LINE_DETECTED);
         minisumo.sensors.line_status = line_sensor_status;
     } else if (collision_sensor_status != NO_COLLISION){
-        minisumo.LM_state = LM_ATTACKING;
+        StateTransition(LM_ATTACKING);
         minisumo.sensors.collision_status = collision_sensor_status;
+        log_data_1("Collision at: %d", minisumo.sensors.collision_status);
     } else if (distance_sensor_status > DS_TRIGGER_THRESHOLD){
-        minisumo.LM_state = LM_ATTACKING;
+        StateTransition(LM_ATTACKING);
         minisumo.sensors.distance = distance_sensor_status;
     }
 }
@@ -66,6 +70,11 @@ static void ClearSensorState(void){
     minisumo.sensors.line_status = 0;
 }
 
+static void StateTransition(LM_State_T state){
+    minisumo.LM_state = state;
+    log_data_1("LM_State: %d", state);
+}
+
 /*****************************************************
  * Public functions
  *****************************************************/
@@ -74,7 +83,7 @@ static void ClearSensorState(void){
 */
 void LM_Init(void){
     LM_Search_Init();
-    minisumo.LM_state = LM_IDLE;
+    StateTransition(LM_IDLE);
     log_info_P(PROGMEM_LM_INIT);
 }
 
@@ -85,15 +94,17 @@ void LM_Run(void){
     {
     case LM_IDLE:
         if(UIM_GetStartBtnState() == BTN_PRESSED){
-            minisumo.LM_state = LM_ARMED;
+            StateTransition(LM_ARMED);
             minisumo.armed_cnt = ARMED_CNT_TOP;
+            log_info("ARMED!");
         }
         //diode off
         break;
     case LM_ARMED:
         minisumo.armed_cnt -= ARMED_CNT_DECREMENT;
         if(minisumo.armed_cnt <= 0 ){
-            minisumo.LM_state = LM_SEARCHING;
+            StateTransition(LM_SEARCHING);
+            log_info("START!");
         }
         //add diode blinking
         break;
