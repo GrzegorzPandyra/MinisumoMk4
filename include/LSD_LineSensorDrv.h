@@ -23,6 +23,8 @@ x x x               x x x
 #define LS6 6
 #define LS7 7
 
+#define LS_NOT_TRIGGERED 0xFF
+
 void LSD_Init(void);
 uint8_t LSD_GetLineStatus(void);
 #endif /* LSD_GUARD */

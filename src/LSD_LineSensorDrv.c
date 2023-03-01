@@ -14,11 +14,13 @@ void LSD_Init(void){
 /** @brief Get status of all line sensors
     @param none
     @return status byte - each bit indicates a single sensor:
-            0: sensor idle
-            1: sensor triggered
+            1: sensor idle
+            0: sensor triggered
 */
 uint8_t LSD_GetLineStatus(void){
     uint8_t data = 0;
     I2C_Receive(&data);
+    // log_data_2("LS state F=0x%x R=0x%x", data&0x0F, data&0xF0);
+    // log_data_1("data %d", data);
     return data;
 }

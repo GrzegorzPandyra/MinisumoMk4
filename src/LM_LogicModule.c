@@ -51,13 +51,12 @@ static void SensorCheck(void){
     uint8_t line_sensor_status = LSD_GetLineStatus();
     CollisionStatus_T collision_sensor_status = CSD_GetCollisionStatus();
     uint8_t distance_sensor_status = DSD_GetDistance();
-    if(line_sensor_status > 0){
+    if(line_sensor_status != LS_NOT_TRIGGERED){
         StateTransition(LM_LINE_DETECTED);
         minisumo.sensors.line_status = line_sensor_status;
     } else if (collision_sensor_status != NO_COLLISION){
         StateTransition(LM_ATTACKING);
         minisumo.sensors.collision_status = collision_sensor_status;
-        log_data_1("Collision at: %d", minisumo.sensors.collision_status);
     } else if (distance_sensor_status > DS_TRIGGER_THRESHOLD){
         StateTransition(LM_ATTACKING);
         minisumo.sensors.distance = distance_sensor_status;
@@ -72,7 +71,7 @@ static void ClearSensorState(void){
 
 static void StateTransition(LM_State_T state){
     minisumo.LM_state = state;
-    log_data_1("LM_State: %d", state);
+    // log_data_1("LM_State: %d", state);
 }
 
 /*****************************************************

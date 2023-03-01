@@ -25,7 +25,6 @@ int main(){
     /* Initialization */
     sei();
     UART_Init(F_CPU, BAUD);
-    log_info_P(PROGMEM_ECU_INIT);
     MDRV_Init();
     I2C_Init();
     LSD_Init();
@@ -35,6 +34,7 @@ int main(){
     CSD_Init();
     UIM_Init();
     LM_Init();
+    log_info_P(PROGMEM_ECU_INIT);
     while(1){ 
         LM_Run();
         // MDRV_Forward();

@@ -8,6 +8,8 @@
 #define CS1 PB0 /* front */
 #define CS2 PB1 /* back */
 
+#define COLLISION_SENSOR_TRIGGERED 0
+
 /** @brief Initialize the module
 */
 void CSD_Init(void){
@@ -30,9 +32,9 @@ CollisionStatus_T CSD_GetCollisionStatus(void){
     CollisionStatus_T status = NO_COLLISION;
     uint8_t cs1_status = MCAL_GetBit((Register_T)&PINB, CS1);
     uint8_t cs2_status = MCAL_GetBit((Register_T)&PINB, CS2);
-    if(cs1_status){
+    if(cs1_status == COLLISION_SENSOR_TRIGGERED){
         status = FRONT_COLLISION;
-    } else if (cs2_status)
+    } else if (cs2_status == COLLISION_SENSOR_TRIGGERED)
     {
         status = REAR_COLLISION;
     }
