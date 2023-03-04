@@ -36,7 +36,7 @@ int main(){
     LM_Init();
     log_info_P(PROGMEM_ECU_INIT);
     while(1){ 
-        LM_Run();
+        // LM_Run();
         // MDRV_Forward();
         // _delay_ms(1000);
         // data[0] = 0x00;
@@ -51,4 +51,7 @@ int main(){
         // log_data_1("Mode = %d", UIM_GetMode());
     }
     return 0;
+}
+
+void Task_10ms(void){
 }

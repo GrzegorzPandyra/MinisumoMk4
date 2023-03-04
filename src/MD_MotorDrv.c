@@ -8,14 +8,15 @@
 *   @note Functions ended with _cbk suffix are for debugging only!
 */
 #include <avr/io.h>
-// #include <stdlib.h>
-// #include <stdio.h>
 #include "config.h"
 #include "common_const.h"
 #include "MCAL.h"
 #include "UART_TX.h"
 #include "MD_MotorDrv.h"
-// #include <util/delay.h>
+
+#define PWM_MAX 100
+
+static uint8_t PWM = 0;
 
 /* Set of functions to combine wheel movements into robot movement*/
 void MDRV_Stop(void){
@@ -51,6 +52,10 @@ void MDRV_TurnLeft(void){
     MCAL_SetBit((Register_T)&PORTC, MCTRL_1B, BIT_SET);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2A, BIT_SET);
     MCAL_SetBit((Register_T)&PORTD, MCTRL_2B, BIT_CLEARED);
+}
+
+void MDRV_SetPWM(uint8_t pwm){
+    PWM = (pwm > PWM_MAX) ? PWM_MAX : pwm;
 }
 
 void MDRV_Init(void){

@@ -9,9 +9,16 @@
     #include "UART_TX.h"
     #include "config.h"
     #include "DSD_DistanceSensorDrv.h"
+    #include "TMR.h"
+
+    void Task_10ms(void);
+
+    #define TASK_10MS_TOP_VALUE 10
+
+    static uint32_t task_10ms_counter = 0;
 
     /**
-     * @brief Interrupt routine executed when ADC completes conversion
+     * @brief 
      */
     ISR(ADC_vect){  
         DSD_ConversionCallback();
@@ -21,6 +28,19 @@
      * @brief
      */
     ISR(TIMER0_OVF_vect){  
+    }
+
+    /**
+     * @brief 
+     */
+    ISR(TIMER0_COMPA_vect){  
+        if(task_10ms_counter == TASK_10MS_TOP_VALUE){
+            task_10ms_counter = 0;
+            Task_10ms();
+        } else{
+            task_10ms_counter++;
+        }
+        Timer_Clear();
     }
 
     #if 0

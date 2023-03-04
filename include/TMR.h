@@ -6,5 +6,6 @@
 */
 
 void Timer_Init(void);
+void Timer_Clear(void);
 
 #endif /* TIMER_GUARD */
