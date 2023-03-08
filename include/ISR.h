@@ -12,26 +12,27 @@
     #include "TMR.h"
 
     void Task_10ms(void);
+    void Task_1ms(void);
 
     #define TASK_10MS_TOP_VALUE 10
 
     static uint32_t task_10ms_counter = 0;
 
     /**
-     * @brief 
+     * @brief ISR executed when ADC completes conversion
      */
     ISR(ADC_vect){  
         DSD_ConversionCallback();
     }
 
     /**
-     * @brief
+     * @brief Interrupt for Timer0 overflow
      */
     ISR(TIMER0_OVF_vect){  
     }
 
     /**
-     * @brief 
+     * @brief ISR executed when Timer0 reaches value in OCR0A
      */
     ISR(TIMER0_COMPA_vect){  
         if(task_10ms_counter == TASK_10MS_TOP_VALUE){
@@ -40,6 +41,7 @@
         } else{
             task_10ms_counter++;
         }
+        Task_1ms();
         Timer_Clear();
     }
 

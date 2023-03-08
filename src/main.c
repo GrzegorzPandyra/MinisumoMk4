@@ -37,12 +37,34 @@ int main(){
     log_info_P(PROGMEM_ECU_INIT);
     while(1){ 
         // LM_Run();
-        // MDRV_Forward();
+        MDRV_Forward();
         // _delay_ms(1000);
         // data[0] = 0x00;
         // I2C_Send(data, sizeof(data));
         // MDRV_Backward();
-        // _delay_ms(1000);
+
+        MDRV_SetPWM(100);
+        _delay_ms(1000);
+        MDRV_SetPWM(90);
+        _delay_ms(1000);
+        MDRV_SetPWM(80);
+        _delay_ms(1000);
+        MDRV_SetPWM(70);
+        _delay_ms(1000);
+        MDRV_SetPWM(60);
+        _delay_ms(1000);
+        MDRV_SetPWM(50);
+        _delay_ms(1000);
+        MDRV_SetPWM(40);
+        _delay_ms(1000);
+        MDRV_SetPWM(30);
+        _delay_ms(1000);
+        MDRV_SetPWM(20);
+        _delay_ms(1000);
+        MDRV_SetPWM(10);
+        _delay_ms(1000);
+        MDRV_SetPWM(0);
+        _delay_ms(1000);
 
         _delay_ms(500);
         // uint16_t distance = 0;
@@ -54,4 +76,8 @@ int main(){
 }
 
 void Task_10ms(void){
+}
+
+void Task_1ms(void){
+    MDRV_PWMHandler();
 }

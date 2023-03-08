@@ -18,6 +18,7 @@ void MDRV_Backward(void);
 void MDRV_TurnRight(void);
 void MDRV_TurnLeft(void);
 void MDRV_SetPWM(uint8_t pwm);
+void MDRV_PWMHandler(void);
 #endif /* MOTOR_DRV_GUARD */
 
 
