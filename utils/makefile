@@ -4,12 +4,12 @@
 
 #folders
 PROJECT_ROOT=..
-OUT_DIR=$(PROJECT_ROOT)/out
-
+OUT_DIR	 = $(PROJECT_ROOT)/out
 MCAL_DIR = $(PROJECT_ROOT)/mcal
 DRV_DIR	 = $(PROJECT_ROOT)/drv
 APP_DIR  = $(PROJECT_ROOT)/app
 LIB_DIR  = $(PROJECT_ROOT)/lib
+OS_DIR   = $(PROJECT_ROOT)/os
 
 MCAL_MODULES = 	startup \
 				config \
@@ -32,12 +32,14 @@ SRC_LIST += $(foreach module, $(MCAL_MODULES), $(wildcard $(MCAL_DIR)/$(module)/
 SRC_LIST += $(foreach module, $(DRV_MODULES),  $(wildcard $(DRV_DIR)/$(module)/*.c))
 SRC_LIST += $(foreach module, $(APP_MODULES),  $(wildcard $(APP_DIR)/$(module)/*.c))
 SRC_LIST += $(foreach module, $(LIB_MODULES),  $(wildcard $(LIB_DIR)/$(module)/*.c))
+SRC_LIST += $(wildcard $(OS_DIR)/*.c)
 
 #assemble list of include directories
 INCLUDE_DIR += $(foreach module, $(MCAL_MODULES), -I $(wildcard $(MCAL_DIR)/$(module)))
 INCLUDE_DIR += $(foreach module, $(DRV_MODULES),  -I $(wildcard $(DRV_DIR)/$(module)))
 INCLUDE_DIR += $(foreach module, $(APP_MODULES),  -I $(wildcard $(APP_DIR)/$(module)))
 INCLUDE_DIR += $(foreach module, $(LIB_MODULES),  -I $(wildcard $(LIB_DIR)/$(module)))
+INCLUDE_DIR += -I $(OS_DIR)
 
 #compiler
 CC=avr-gcc

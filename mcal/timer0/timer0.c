@@ -10,7 +10,7 @@
 
 #define TIMER0_COMPA 250
 
-void Timer_Init(void){
+void Timer0_Init(void){
     /* Set timer clk source and prescaler(64) */
     Utils_SetBit((Register_T)&TCCR0B, CS00, BIT_SET);
     Utils_SetBit((Register_T)&TCCR0B, CS01, BIT_SET);
@@ -30,6 +30,6 @@ void Timer_Init(void){
     #endif
 }
 
-void Timer_Clear(void){
+void Timer0_Clear(void){
     Utils_WriteRegister((Register_T)&TCNT0, 0);
 }

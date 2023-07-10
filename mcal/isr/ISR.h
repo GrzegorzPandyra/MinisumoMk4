@@ -6,15 +6,9 @@
         This file needs to be included in file with "main" function. ISRs are kept separated here for the purpose of clarity.
     */
     #include "config.h"
+    #include "os.h"
     // #include "DSD_DistanceSensorDrv.h"
-    // #include "TMR.h"
-
-    void Task_10ms(void);
-    void Task_1ms(void);
-
-    #define TASK_10MS_TOP_VALUE 10
-
-    // static uint32_t task_10ms_counter = 0;
+    #include "timer0.h"
 
     /**
      * @brief ISR executed when ADC completes conversion
@@ -33,14 +27,8 @@
      * @brief ISR executed when Timer0 reaches value in OCR0A
      */
     ISR(TIMER0_COMPA_vect){  
-        // if(task_10ms_counter == TASK_10MS_TOP_VALUE){
-        //     task_10ms_counter = 0;
-        //     Task_10ms();
-        // } else{
-        //     task_10ms_counter++;
-        // }
-        // Task_1ms();
-        // Timer_Clear();
+        os_run();
+        Timer0_Clear();
     }
 
     #if 0

@@ -5,7 +5,7 @@
     @brief API for HW timer
 */
 
-void Timer_Init(void);
-void Timer_Clear(void);
+void Timer0_Init(void);
+void Timer0_Clear(void);
 
 #endif /* TIMER_GUARD */

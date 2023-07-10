@@ -10,7 +10,8 @@
 #ifdef LOGGING_ENABLED
     #include "logging.h"
 #endif
-// #include "UART_DRV.h"
+#include "uart_drv.h"
+#include "logger_tx.h"
 // #include "MD_MotorDrv.h"
 // #include "I2C.h"
 // #include "LSD_LineSensorDrv.h"
@@ -27,7 +28,7 @@
 int main(){
     /* Initialization */
     sei();
-//     UART_Init(F_CPU, BAUD);
+    Uart_Init(F_CPU, BAUD);
 //     MDRV_Init();
 //     I2C_Init();
 //     LSD_Init();
@@ -37,7 +38,7 @@ int main(){
 //     CSD_Init();
 //     UIM_Init();
 //     LM_Init();
-//     log_info_P(PROGMEM_ECU_INIT);
+    log_info_P(PROGMEM_ECU_INIT);
 //     while(1){ 
 //         // LM_Run();
 //         MDRV_Forward();
@@ -76,11 +77,4 @@ int main(){
 //         // log_data_1("Mode = %d", UIM_GetMode());
 //     }
 //     return 0;
-}
-
-void Task_10ms(void){
-}
-
-void Task_1ms(void){
-    // MDRV_PWMHandler();
 }
