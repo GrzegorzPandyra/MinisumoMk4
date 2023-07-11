@@ -18,7 +18,7 @@ static void Uart_Selfcheck(void);
 
 void Uart_Init(void){
     /* Set baud rate */
-    uint32_t ubrr = F_CPU/(16*UART_BAUDRATE)-1;
+    uint32_t ubrr = (uint32_t)F_CPU/(16*(uint32_t)UART_BAUDRATE)-1;
     Utils_WriteRegister((Register_T)&UBRR0H, (unsigned char)(ubrr>>8));
     Utils_WriteRegister((Register_T)&UBRR0L, (unsigned char)ubrr);
     
@@ -69,19 +69,32 @@ void Uart_Init(void){
     
     /* Clear INT0 flag */
     // EIFR |= 1<<INTF0;
-    Uart_Selfcheck();
+    #ifdef SELFCHECK
+        Uart_Selfcheck();
+    #endif
 }
 
+/**
+ * @brief Write single character into UDR
+ * @param c char to be written
+ */
 void Uart_Write(char c){
     while ( !(UCSR0A & (1<<UDRE0)) )
     ;
     Utils_WriteRegister((Register_T)&UDR0, (uint8_t)c);
 }
 
+/**
+ * @brief Read data in UDR
+ * @return char data received from UDR
+ */
 char Uart_Read(){
     return Utils_ReadRegister((Register_T)&UDR0);
 }
 
+/**
+ * @brief Automatic check on driver init to let user know if driver is working correctly
+ */
 static void Uart_Selfcheck(void){
     for(uint8_t i=0; i<sizeof(SELFCHECK_STRING)/sizeof(SELFCHECK_STRING[0]); i++){
         Uart_Write(SELFCHECK_STRING[i]);

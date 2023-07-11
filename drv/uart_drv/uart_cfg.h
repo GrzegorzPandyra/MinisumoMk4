@@ -15,5 +15,7 @@
     #warning "UART_BAUDRATE is not defined! Assigning default value."
 #endif
 
+#define SELFCHECK 1U
+
 #endif /* #define UART_CFG_GUARD
  */
