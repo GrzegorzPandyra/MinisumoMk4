@@ -85,7 +85,7 @@ static void to_tx_buffer(const char c){
 static void process_char(const unsigned char c){
     switch(data_destination){
         case T_UDR:
-            Uart_WriteBuffer(c);
+            Uart_Write(c);
             break;
         case T_TX_BUFFER:
             if(!serial_is_tx_buffer_full()){
@@ -183,7 +183,7 @@ static void show_tx_buffer_overflow_error(void){
     if(is_buffering_enabled)
         serial_disable_buffering();
     
-    Uart_WriteBuffer(NEWLINE_CHAR);
+    Uart_Write(NEWLINE_CHAR);
     // log_err_P(PROGMEM_TX_BUFFER_OVERFLOW);
     
     if(is_buffering_enabled)
@@ -242,7 +242,7 @@ void serial_read_tx_buffer(void){
         char *tx_buffer_read_ptr = tx_buffer;
 
         while(tx_buffer_read_ptr < tx_buffer_head){
-            Uart_WriteBuffer(*tx_buffer_read_ptr++);
+            Uart_Write(*tx_buffer_read_ptr++);
         }
 
         if(serial_is_tx_buffer_full()){

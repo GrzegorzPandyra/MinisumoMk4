@@ -4,7 +4,6 @@
 
 #include <avr/interrupt.h>
 #include <stdint.h>
-#include "config.h"
 #include <util/delay.h>
 #include "isr.h"
 #ifdef LOGGING_ENABLED
@@ -28,7 +27,7 @@
 int main(){
     /* Initialization */
     sei();
-    Uart_Init(F_CPU, BAUD);
+    Uart_Init();
 //     MDRV_Init();
 //     I2C_Init();
 //     LSD_Init();
@@ -38,7 +37,7 @@ int main(){
 //     CSD_Init();
 //     UIM_Init();
 //     LM_Init();
-    log_info_P(PROGMEM_ECU_INIT);
+    // log_info_P(PROGMEM_ECU_INIT);
 //     while(1){ 
 //         // LM_Run();
 //         MDRV_Forward();

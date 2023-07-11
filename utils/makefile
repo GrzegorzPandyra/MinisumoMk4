@@ -48,6 +48,7 @@ CFLAGS= -Wall -Os -std=c99 -mmcu=$(MMCU)
 DEFINES = 	-D DUMMY_DEFINE_1 \
 			# -D UART_TX_DEBUG \
 
+include ../mcal/config/global_config
 
 #default rule
 all: clean minisumo_mk4.elf minisumo_mk4.hex mem print_ok
