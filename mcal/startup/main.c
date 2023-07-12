@@ -37,7 +37,7 @@ int main(){
 //     CSD_Init();
 //     UIM_Init();
 //     LM_Init();
-    // log_info_P(PROGMEM_ECU_INIT);
+    log_info_P(PGM_ECU_INIT);
 //     while(1){ 
 //         // LM_Run();
 //         MDRV_Forward();

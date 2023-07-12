@@ -46,7 +46,6 @@ CC=avr-gcc
 MMCU=atmega328P
 CFLAGS= -Wall -Os -std=c99 -mmcu=$(MMCU)
 DEFINES = 	-D DUMMY_DEFINE_1 \
-			# -D UART_TX_DEBUG \
 
 include ../mcal/config/global_config
 

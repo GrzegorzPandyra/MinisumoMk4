@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <avr/pgmspace.h>
 #include <logger_progmem.h>
+#include "logger_cfg.h"
 
 /**
  * @brief Describes the type of log being send.
@@ -31,7 +32,7 @@ typedef struct Log_Metadata_Tag{
 } Log_Metadata_T;
 
 /** Logging API */
-#define copy_to_ram(id)     (strcpy_P(data_conversion_buffer, (char*)pgm_read_word(&progmem_string_table[(uint8_t)id])))
+#define copy_to_ram(id)     (strcpy_P(data_conversion_buffer, (char*)pgm_read_word(&PGM_DATA_LIST[(uint8_t)id])))
 #define get_metadata(type)  (Log_Metadata_T){__FILE__, __LINE__, type}
 
 #define log_info(str)   (serial_log( get_metadata(INFO), str ))
@@ -65,7 +66,5 @@ typedef struct Log_Metadata_Tag{
                                                                             serial_log(get_metadata(INFO), data_conversion_buffer)                                                                           
                                    
 void serial_log(const Log_Metadata_T metadata, const char *str);
-void serial_disable_buffering(void);
-void serial_enable_buffering(void);
 void serial_log_raw_string(const char *str);
 #endif /* UART_TX_GUARD */

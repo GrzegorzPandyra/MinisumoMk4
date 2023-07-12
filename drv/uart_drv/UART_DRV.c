@@ -5,7 +5,7 @@
 #include "uart_drv.h"
 #include "uart_cfg.h"
 
-static const char SELFCHECK_STRING[] = "UART drv OK\n";
+static const char SELFCHECK_STRING[] = "!UART DRV SELFCHECK!\n";
 
 /* Private functions */
 static void Uart_Selfcheck(void);

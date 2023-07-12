@@ -1,15 +1,14 @@
-/** @file UART_TX.c
-*   @brief Implementation of UART transmission 
+/** @file logger_tx.c
+*   @brief Implementation of TX part of logger 
 */
 #include "logger_tx.h"
 #include "uart_drv.h"
-// #include "common_const.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 /* Disable debug logs if AI_DEBUG is not defined during build */
-#ifdef UART_TX_DEBUG
+#if LOGGING_ENABLED == 0
     #undef log_info_P
     #define log_info_P(str)
     #undef log_info
@@ -42,21 +41,11 @@
 #define SPACE_CHAR ' '
 #define COLON_CHAR ':'
 
-/**
- * @brief Marker used to determine if logs should be passed directly to UDR 
- * or stored in TX buffer until explicitly moved to UDR
- */
-typedef enum Data_Target_Tag{
-    T_UDR = 0,
-    T_TX_BUFFER = 1
-} Data_Target_T;
-
 
 /* Local static variables */
 static const char msg_type_str[MSG_TYPES_NUM][MSG_TYPE_LENGTH] = {"INFO", "WARNING", "ERROR", "DATA"};
 static char tx_buffer[TX_BUFFER_SIZE] = {0};
 static char *tx_buffer_head = tx_buffer;
-static Data_Target_T data_destination = T_UDR;
 
 /* Local static functions */
 static void to_tx_buffer(const char c);
@@ -66,7 +55,6 @@ static void print_msg_src(const char *src);
 static void print_msg_type(Log_Type_T msg_type);
 static void print_msg_data(const char *data);
 static void print_line_number(const uint32_t line_num);
-static void show_tx_buffer_overflow_error(void);
 static bool serial_is_tx_buffer_full(void);
 static void serial_clear_tx_buffer(void);
 
@@ -83,18 +71,12 @@ static void to_tx_buffer(const char c){
  * @param c character to be send
  */
 static void process_char(const unsigned char c){
-    switch(data_destination){
-        case T_UDR:
-            Uart_Write(c);
-            break;
-        case T_TX_BUFFER:
-            if(!serial_is_tx_buffer_full()){
-                to_tx_buffer(c);
-            } 
-            break;
-        default:
-            /*None*/
-            break;
+    if(BUFFERING_ENABLED){
+        if(!serial_is_tx_buffer_full()){
+            to_tx_buffer(c);
+        } 
+    } else {
+        Uart_Write(c);
     }
 } 
 
@@ -174,22 +156,6 @@ static void print_line_number(const uint32_t line_num){
     }
 }
 
-/**
- * @brief Handler for TX_BUFFER overflow. This function disables data buffering to show error. 
- * NEWLINE_CHAR compensates for missing newline character from unfinished log.
- */
-static void show_tx_buffer_overflow_error(void){
-    bool is_buffering_enabled = (data_destination == T_TX_BUFFER)? true: false;
-    if(is_buffering_enabled)
-        serial_disable_buffering();
-    
-    Uart_Write(NEWLINE_CHAR);
-    // log_err_P(PROGMEM_TX_BUFFER_OVERFLOW);
-    
-    if(is_buffering_enabled)
-        serial_enable_buffering();
-}
-
 /* Public functions */
 /**
  * @brief Send string str via serial
@@ -216,23 +182,6 @@ void serial_log(const Log_Metadata_T metadata, const char *str){
 }
 
 /**
- * @brief Enable data buffering
- */
-void serial_enable_buffering(void){
-    // log_info_P(PROGMEM_LOG_BUFFERING_ENABLED);
-    data_destination = T_TX_BUFFER;
-}
-
-/**
- * @brief Disable data buffering
- */
-    
-void serial_disable_buffering(void){
-    data_destination = T_UDR;
-    // log_info_P(PROGMEM_LOG_BUFFERING_DISABLED);
-}
-
-/**
  * @brief Moves content of TX_BUFFER into UDR until current position of tx_buffer_head is not found.
  * Prints additional log if buffer overflow occured, then moves tx_buffer_head to the begining of TX_BUFFER
  * which is considered as clearing the buffer
@@ -243,10 +192,6 @@ void serial_read_tx_buffer(void){
 
         while(tx_buffer_read_ptr < tx_buffer_head){
             Uart_Write(*tx_buffer_read_ptr++);
-        }
-
-        if(serial_is_tx_buffer_full()){
-            show_tx_buffer_overflow_error();
         }
 
         serial_clear_tx_buffer();
