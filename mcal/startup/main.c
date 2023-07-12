@@ -12,7 +12,7 @@
 #include "uart_drv.h"
 #include "logger_tx.h"
 // #include "MD_MotorDrv.h"
-// #include "I2C.h"
+#include "i2c_drv.h"
 // #include "LSD_LineSensorDrv.h"
 // #include "DSD_DistanceSensorDrv.h"
 // #include "ADC.h"
@@ -29,7 +29,7 @@ int main(){
     sei();
     Uart_Init();
 //     MDRV_Init();
-//     I2C_Init();
+    I2c_Init();
 //     LSD_Init();
 //     ADC_Init();
 //     Timer_Init();

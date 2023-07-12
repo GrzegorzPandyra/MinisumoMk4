@@ -7,6 +7,7 @@
 #ifdef LOGGING_ENABLED
     #include "logging.h"
 #endif
+#include "logger_tx.h"
 
 /* See datasheet PCF8574 8.3.3*/
 #define PCF8574N_I2C_WRITE_ADDR 0x42
@@ -23,9 +24,7 @@ void I2c_Init(){
     uint8_t init_value = I2C_INIT_VALUE;
     tw_init(TW_FREQ_100K, true);
     tw_master_transmit(PCF8574N_I2C_WRITE_ADDR, &init_value, sizeof(init_value), false);
-    #ifdef LOGGING_ENABLED
-        log_info_P(PROGMEM_I2C_INIT);
-    #endif
+    log_info_P(PGM_I2C_INIT);
 }
 
 uint8_t I2c_Send(uint8_t *data, uint8_t len){

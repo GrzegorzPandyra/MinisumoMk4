@@ -10,17 +10,6 @@
 #include <stdio.h>
 #include <avr/pgmspace.h>
 #include <logger_progmem.h>
-#include "logger_cfg.h"
-
-/**
- * @brief Describes the type of log being send.
- */
-typedef enum Log_Type_Tag{
-    INFO = 0,
-    WARNING = 1,
-    ERROR = 2,
-    DATA = 3
-} Log_Type_T;
 
 /**
  * @brief Structure describing the origin and type of log
@@ -28,43 +17,42 @@ typedef enum Log_Type_Tag{
 typedef struct Log_Metadata_Tag{
     const char *filename;
     const uint32_t line_num;
-    const Log_Type_T log_type;
+    const Progmem_Table_Index_T log_type;
+    const Progmem_Table_Index_T msg_id;
 } Log_Metadata_T;
 
 /** Logging API */
-#define copy_to_ram(id)     (strcpy_P(data_conversion_buffer, (char*)pgm_read_word(&PGM_DATA_LIST[(uint8_t)id])))
-#define get_metadata(type)  (Log_Metadata_T){__FILE__, __LINE__, type}
+#define get_metadata(type, msg_id)  (Log_Metadata_T){__FILE__, __LINE__, type, msg_id}
 
-#define log_info(str)   (serial_log( get_metadata(INFO), str ))
-#define log_info_P(id)  copy_to_ram(id); \
-                        serial_log(get_metadata(INFO), data_conversion_buffer)
+#define log_info(str)   logger_log(get_metadata(PGM_INFO, 0xFF), str )
+#define log_info_P(id)  logger_log(get_metadata(PGM_INFO, id  ), NULL)
                           
-#define log_warn(str)   (serial_log( get_metadata(WARNING), str ))
-#define log_warn_P(id)  copy_to_ram(id); \
-                        serial_log(get_metadata(WARNING), data_conversion_buffer)
-#define log_err(str)    (serial_log( get_metadata(ERROR), str ))
-#define log_err_P(id)   copy_to_ram(id); \
-                        serial_log(get_metadata(ERROR), data_conversion_buffer)
+// #define log_warn(str)   (logger_log( get_metadata(WARNING), str ))
+// #define log_warn_P(id)  copy_to_ram(id); 
+//                         logger_log(get_metadata(WARNING), flash_to_ram_buffer.data)
+// #define log_err(str)    (logger_log( get_metadata(ERROR), str ))
+// #define log_err_P(id)   copy_to_ram(id); 
+//                         logger_log(get_metadata(ERROR), flash_to_ram_buffer.data)
 
-#define log_raw_string(str) serial_log_raw_string(str)
+// #define log_raw_string(str) logger_log_raw_string(str)
 
-#define log_data_1(format, arg1)                                            sprintf(data_conversion_buffer, format, arg1);\
-                                                                            serial_log(get_metadata(INFO), data_conversion_buffer)
-#define log_data_2(format, arg1, arg2)                                      sprintf(data_conversion_buffer, format, arg1, arg2);\
-                                                                            serial_log(get_metadata(INFO), data_conversion_buffer)
-#define log_data_3(format, arg1,arg2, arg3)                                 sprintf(data_conversion_buffer, format, arg1, arg2, arg3);\
-                                                                            serial_log(get_metadata(INFO), data_conversion_buffer)
-#define log_data_4(format, arg1, arg2, arg3, arg4)                          sprintf(data_conversion_buffer, format, arg1, arg2, arg3, arg4);\
-                                                                            serial_log(get_metadata(INFO), data_conversion_buffer)
-#define log_data_5(format, arg1, arg2, arg3, arg4, arg5)                    sprintf(data_conversion_buffer, format, arg1, arg2, arg3, arg4, arg5);\
-                                                                            serial_log(get_metadata(INFO), data_conversion_buffer)
-#define log_data_6(format, arg1, arg2, arg3, arg4, arg5, arg6)              sprintf(data_conversion_buffer, format, arg1, arg2, arg3, arg4, arg5, arg6);\
-                                                                            serial_log(get_metadata(INFO), data_conversion_buffer)
-#define log_data_7(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7)        sprintf(data_conversion_buffer, format, arg1, arg2, arg3, arg4, arg5, arg6, arg7);\
-                                                                            serial_log(get_metadata(INFO), data_conversion_buffer)
-#define log_data_8(format, arg1, arg2, arg3, arg4, arg5,arg6, arg7, arg8)   sprintf(data_conversion_buffer, format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);\
-                                                                            serial_log(get_metadata(INFO), data_conversion_buffer)                                                                           
+// #define log_data_1(format, arg1)                                            sprintf(flash_to_ram_buffer.data, format, arg1);
+//                                                                             logger_log(get_metadata(INFO), flash_to_ram_buffer.data)
+// #define log_data_2(format, arg1, arg2)                                      sprintf(flash_to_ram_buffer.data, format, arg1, arg2);
+//                                                                             logger_log(get_metadata(INFO), flash_to_ram_buffer.data)
+// #define log_data_3(format, arg1,arg2, arg3)                                 sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3);
+//                                                                             logger_log(get_metadata(INFO), flash_to_ram_buffer.data)
+// #define log_data_4(format, arg1, arg2, arg3, arg4)                          sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4);
+//                                                                             logger_log(get_metadata(INFO), flash_to_ram_buffer.data)
+// #define log_data_5(format, arg1, arg2, arg3, arg4, arg5)                    sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4, arg5);
+//                                                                             logger_log(get_metadata(INFO), flash_to_ram_buffer.data)
+// #define log_data_6(format, arg1, arg2, arg3, arg4, arg5, arg6)              sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6);
+//                                                                             logger_log(get_metadata(INFO), flash_to_ram_buffer.data)
+// #define log_data_7(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7)        sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+//                                                                             logger_log(get_metadata(INFO), flash_to_ram_buffer.data)
+// #define log_data_8(format, arg1, arg2, arg3, arg4, arg5,arg6, arg7, arg8)   sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+//                                                                             logger_log(get_metadata(INFO), flash_to_ram_buffer.data)                                                                           
                                    
-void serial_log(const Log_Metadata_T metadata, const char *str);
-void serial_log_raw_string(const char *str);
+void logger_log(const Log_Metadata_T metadata, const char *str);
+void logger_log_raw_string(const char *str);
 #endif /* UART_TX_GUARD */

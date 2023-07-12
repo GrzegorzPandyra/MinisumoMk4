@@ -3,6 +3,21 @@
     /*! @file logger_progmem.h
         @brief Declarations needed to access PROGMEM data in flash
     */
+    #include <avr/pgmspace.h>
+    #include "logger_cfg.h"
+    #include "buffer.h"
+    
+    #define copy_to_ram_data(id) strcpy_P( \
+                                            flash_to_ram_buffer.data, \
+                                            (const char*)pgm_read_word(&PGM_DATA_LIST[(uint8_t)(id)]) \
+                                         )
+    #define copy_to_ram_data_length(id) flash_to_ram_buffer.data_length = \
+                                        strlen_P( \
+                                                    (const char*)pgm_read_word(&PGM_DATA_LIST[(uint8_t)(id)]) \
+                                                ) 
+    #define copy_to_ram(id) copy_to_ram_data(id); \
+                            copy_to_ram_data_length(id)
+                            
 
     /** Indexes related to strings stored in PROGMEM_MESSAGE_LIST */                                                                                            
     typedef enum Progmem_Table_Index_Tag{
@@ -23,7 +38,7 @@
     } Progmem_Table_Index_T;
 
     /* Global variables */
-    extern char data_conversion_buffer[];
+    extern Small_Buffer_T flash_to_ram_buffer;
     extern const char* const PGM_DATA_LIST[];
 
 #endif /* LOGGER_PROGMEM_GUARD */

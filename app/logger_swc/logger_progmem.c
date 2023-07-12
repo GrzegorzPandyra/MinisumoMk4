@@ -2,9 +2,7 @@
 *   @brief Definitions of objects used by PROGMEM 
     PROGMEM macro marks objects that are stored in MCU's flash memory (instead of RAM, which is very limited).
 */
-#include <avr/pgmspace.h>
-
-#define DATA_CONVERSION_BUFFER_SIZE 30
+#include "logger_progmem.h"
 
 /* Literals kept in codeflash for logging                   0|                             |29*/
 static const char PGM_DATA_ECU_INIT[]           PROGMEM = "ECU init";
@@ -23,8 +21,7 @@ static const char PGM_DATA_LOGTYPE_ERROR[]      PROGMEM = "ERROR";
 static const char PGM_DATA_LOGTYPE_DATA[]       PROGMEM = "DATA";
 
 
-/* Buffer used for data exchange between RAM and FLASH */
-char data_conversion_buffer[DATA_CONVERSION_BUFFER_SIZE] = {};
+Small_Buffer_T buffer(flash_to_ram_buffer); 
 
 /* Table for accessing PROGMEM strings*/
 const char* const PGM_DATA_LIST[] PROGMEM = {
