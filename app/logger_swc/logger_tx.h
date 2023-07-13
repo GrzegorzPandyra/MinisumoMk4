@@ -11,21 +11,24 @@
 #include <avr/pgmspace.h>
 #include <logger_progmem.h>
 
+#define IRRELEVANT_ID 0xFFU
+
 /**
- * @brief Structure describing the origin and type of log
+ * @brief Structure describing the log
  */
-typedef struct Log_Metadata_Tag{
+typedef struct Log_Tag{
     const char *filename;
     const uint32_t line_num;
     const Progmem_Table_Index_T log_type;
     const Progmem_Table_Index_T msg_id;
-} Log_Metadata_T;
+    const char *msg_str;
+} Log_T;
 
 /** Logging API */
-#define get_metadata(type, msg_id)  (Log_Metadata_T){__FILE__, __LINE__, type, msg_id}
+#define pack_log(type, msg_id, msg_str)  (Log_T){__FILE__, __LINE__, type, msg_id, msg_str}
 
-#define log_info(str)   logger_log(get_metadata(PGM_INFO, 0xFF), str )
-#define log_info_P(id)  logger_log(get_metadata(PGM_INFO, id  ), NULL)
+#define log_info(str)   logger_log(pack_log(PGM_INFO, IRRELEVANT_ID, str))
+#define log_info_P(id)  logger_log(pack_log(PGM_INFO, id           , NULL))
                           
 // #define log_warn(str)   (logger_log( get_metadata(WARNING), str ))
 // #define log_warn_P(id)  copy_to_ram(id); 
@@ -53,6 +56,6 @@ typedef struct Log_Metadata_Tag{
 // #define log_data_8(format, arg1, arg2, arg3, arg4, arg5,arg6, arg7, arg8)   sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 //                                                                             logger_log(get_metadata(INFO), flash_to_ram_buffer.data)                                                                           
                                    
-void logger_log(const Log_Metadata_T metadata, const char *str);
+void logger_log(const Log_T log);
 void logger_log_raw_string(const char *str);
 #endif /* UART_TX_GUARD */

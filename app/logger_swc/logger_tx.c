@@ -30,7 +30,7 @@
 
 /* Local static functions */
 static void get_filename_from_path(char *filename, const char *path);
-static void logger_serialize(const Log_Metadata_T metadata, const char *data, char *serialized_msg);
+static void logger_serialize(const Log_T metadata, char *serialized_msg);
 
 /**
  * @brief Parses path, looking for last '/' character, then treats the rest as filename. 
@@ -56,23 +56,23 @@ static void get_filename_from_path(char *filename, const char *path){
     memcpy(filename, last_slash_ptr+OMIT_SLASH, filename_length);
 }
 
-static void logger_serialize(const Log_Metadata_T metadata, const char *data, char *serialized_msg){
+static void logger_serialize(const Log_T log, char *serialized_msg){
     uint8_t offset = 0U;
 
     /* Filename */
-    get_filename_from_path(serialized_msg, metadata.filename);
+    get_filename_from_path(serialized_msg, log.filename);
     offset += MSG_SRC_LENGTH;
     serialized_msg[offset] = COLON_CHAR;
     offset++;
 
     /* Line number */
-    itoa(metadata.line_num, serialized_msg + offset, DECIMAL);
+    itoa(log.line_num, serialized_msg + offset, DECIMAL);
     offset += DECIMAL;
     serialized_msg[offset] = SPACE_CHAR;
     offset++;
 
     /* Log type */
-    copy_to_ram(metadata.log_type);
+    copy_to_ram(log.log_type);
     memcpy(serialized_msg + offset, (const void *) flash_to_ram_buffer.data, flash_to_ram_buffer.data_length);
     offset += flash_to_ram_buffer.data_length;
     clear(flash_to_ram_buffer);
@@ -80,17 +80,17 @@ static void logger_serialize(const Log_Metadata_T metadata, const char *data, ch
     offset++;
 
     /* Payload */
-    if(metadata.msg_id == 0xFF){
+    if(log.msg_id == 0xFF){
 
     } else {
-        copy_to_ram(metadata.msg_id);
+        copy_to_ram(log.msg_id);
         memcpy(serialized_msg + offset, (const void *) flash_to_ram_buffer.data, flash_to_ram_buffer.data_length);
         offset += flash_to_ram_buffer.data_length;
         clear(flash_to_ram_buffer);
     }
 
     /* Wrap-up */
-    if(metadata.log_type != PGM_DATA){
+    if(log.log_type != PGM_DATA){
         serialized_msg[offset] = NEWLINE_CHAR;
         offset++;
     }
@@ -103,11 +103,11 @@ static void logger_serialize(const Log_Metadata_T metadata, const char *data, ch
  * main.c  :  44      INFO    Hello from ATmega8
  * <source> <line>  <log type>  <Log data (string)>
  * @param str       String to be send. Must be null-terminated
- * @param metadata  Struct containing file, line and type of log
+ * @param log  Struct containing file, line and type of log
  */
-void logger_log(const Log_Metadata_T metadata, const char *str){
+void logger_log(const Log_T log){
     char serialized_message[BUFFER_SIZE_MEDIUM] = {0};
-    logger_serialize(metadata, str, serialized_message);
+    logger_serialize(log, serialized_message);
     for(uint16_t i=0U; i<BUFFER_SIZE_MEDIUM; i++){
         Uart_Write(serialized_message[i]);
     }
