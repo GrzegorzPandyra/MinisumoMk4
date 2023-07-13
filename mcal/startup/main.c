@@ -12,6 +12,7 @@
 #include "uart_drv.h"
 #include "logger_tx.h"
 // #include "MD_MotorDrv.h"
+// #include "os.h"
 #include "i2c_drv.h"
 // #include "LSD_LineSensorDrv.h"
 // #include "DSD_DistanceSensorDrv.h"
@@ -29,6 +30,7 @@ int main(){
     sei();
     Uart_Init();
 //     MDRV_Init();
+    // os_init();
     I2c_Init();
 //     LSD_Init();
 //     ADC_Init();
@@ -38,7 +40,7 @@ int main(){
 //     UIM_Init();
 //     LM_Init();
     log_info_P(PGM_ECU_INIT);
-//     while(1){ 
+    while(1){ 
 //         // LM_Run();
 //         MDRV_Forward();
 //         // _delay_ms(1000);
@@ -69,11 +71,12 @@ int main(){
 //         MDRV_SetPWM(0);
 //         _delay_ms(1000);
 
-//         _delay_ms(500);
+        _delay_ms(2000);
+        logger_transmit();
 //         // uint16_t distance = 0;
 //         // distance = DSD_GetDistance();
 //         // log_data_1("Distance = %d", distance);
 //         // log_data_1("Mode = %d", UIM_GetMode());
-//     }
-//     return 0;
+    }
+    return 0;
 }

@@ -10,7 +10,6 @@
 
 /* Local macro definitions */
 #define MAX_UART_DATA_LENGTH 100
-#define TX_BUFFER_SIZE       300
 #define MSG_SRC_LENGTH       8
 #define MSG_TYPE_LENGTH      8
 #define MSG_TYPES_NUM        4
@@ -25,12 +24,11 @@
 #define COLON_CHAR ':'
 
 /* Local static variables */
-// static char tx_buffer[TX_BUFFER_SIZE] = {0};
-// static char *tx_buffer_head = tx_buffer;
+Large_Buffer_T buffer(logger_tx_buffer); 
 
 /* Local static functions */
 static void get_filename_from_path(char *filename, const char *path);
-static void logger_serialize(const Log_T metadata, char *serialized_msg);
+static void logger_serialize(const Log_T metadata, Medium_Buffer_T *serialized_msg);
 
 /**
  * @brief Parses path, looking for last '/' character, then treats the rest as filename. 
@@ -56,43 +54,38 @@ static void get_filename_from_path(char *filename, const char *path){
     memcpy(filename, last_slash_ptr+OMIT_SLASH, filename_length);
 }
 
-static void logger_serialize(const Log_T log, char *serialized_msg){
-    uint8_t offset = 0U;
+static void logger_serialize(const Log_T log, Medium_Buffer_T *serialized_msg){
 
     /* Filename */
-    get_filename_from_path(serialized_msg, log.filename);
-    offset += MSG_SRC_LENGTH;
-    serialized_msg[offset] = COLON_CHAR;
-    offset++;
+    get_filename_from_path((*serialized_msg).data, log.filename);
+    (*serialized_msg).data_length += MSG_SRC_LENGTH;
+    push(*serialized_msg, COLON_CHAR);
 
     /* Line number */
-    itoa(log.line_num, serialized_msg + offset, DECIMAL);
-    offset += DECIMAL;
-    serialized_msg[offset] = SPACE_CHAR;
-    offset++;
+    itoa(log.line_num, (*serialized_msg).data + (*serialized_msg).data_length, DECIMAL);
+    (*serialized_msg).data_length += DECIMAL;
+    push(*serialized_msg, SPACE_CHAR);
 
     /* Log type */
     copy_to_ram(log.log_type);
-    memcpy(serialized_msg + offset, (const void *) flash_to_ram_buffer.data, flash_to_ram_buffer.data_length);
-    offset += flash_to_ram_buffer.data_length;
+    memcpy((*serialized_msg).data + (*serialized_msg).data_length, (const void *) flash_to_ram_buffer.data, flash_to_ram_buffer.data_length);
+    (*serialized_msg).data_length += flash_to_ram_buffer.data_length;
     clear(flash_to_ram_buffer);
-    serialized_msg[offset] = SPACE_CHAR;
-    offset++;
+    push(*serialized_msg, SPACE_CHAR);
 
     /* Payload */
-    if(log.msg_id == 0xFF){
+    if(log.msg_id == IRRELEVANT_ID){
 
     } else {
         copy_to_ram(log.msg_id);
-        memcpy(serialized_msg + offset, (const void *) flash_to_ram_buffer.data, flash_to_ram_buffer.data_length);
-        offset += flash_to_ram_buffer.data_length;
+        memcpy((*serialized_msg).data + (*serialized_msg).data_length, (const void *) flash_to_ram_buffer.data, flash_to_ram_buffer.data_length);
+        (*serialized_msg).data_length += flash_to_ram_buffer.data_length;
         clear(flash_to_ram_buffer);
     }
 
     /* Wrap-up */
     if(log.log_type != PGM_DATA){
-        serialized_msg[offset] = NEWLINE_CHAR;
-        offset++;
+        push(*serialized_msg, NEWLINE_CHAR);
     }
 }
 
@@ -106,11 +99,24 @@ static void logger_serialize(const Log_T log, char *serialized_msg){
  * @param log  Struct containing file, line and type of log
  */
 void logger_log(const Log_T log){
-    char serialized_message[BUFFER_SIZE_MEDIUM] = {0};
-    logger_serialize(log, serialized_message);
-    for(uint16_t i=0U; i<BUFFER_SIZE_MEDIUM; i++){
-        Uart_Write(serialized_message[i]);
+    Medium_Buffer_T buffer(serialized_message);
+    logger_serialize(log, &serialized_message);
+    for(uint16_t i=0U; i<serialized_message.data_length; i++){
+        #if BUFFERING_ENABLED
+            push(logger_tx_buffer, serialized_message.data[i]);
+        #else
+            Uart_Write(serialized_message.data[i]);
+        #endif
     }
+}
+
+void logger_transmit(void){
+    #if BUFFERING_ENABLED
+        for(uint16_t i=0U; i<logger_tx_buffer.data_length; i++){
+            Uart_Write(logger_tx_buffer.data[i]);
+        }
+        clear(logger_tx_buffer);
+    #endif
 }
 
 /**

@@ -58,4 +58,5 @@ typedef struct Log_Tag{
                                    
 void logger_log(const Log_T log);
 void logger_log_raw_string(const char *str);
+void logger_transmit(void);
 #endif /* UART_TX_GUARD */

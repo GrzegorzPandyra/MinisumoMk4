@@ -9,6 +9,8 @@
 
 #define buffer(buff) buff = {{BUFFER_INIT}, BUFFER_INIT}
 #define clear(buff) buff.data_length = BUFFER_INIT
+#define push(buff, val) (buff).data[(buff).data_length]=(val); \
+                        (buff).data_length++
 
 typedef struct Small_Buffer_Tag{
     char data[BUFFER_SIZE_SMALL];

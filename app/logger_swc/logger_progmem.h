@@ -31,6 +31,7 @@
         PGM_CSD_INIT,
         PGM_LM_INIT,
         PGM_UIM_INIT,
+        PGM_OS_INIT,
         PGM_INFO,
         PGM_WARNING,
         PGM_ERROR,
