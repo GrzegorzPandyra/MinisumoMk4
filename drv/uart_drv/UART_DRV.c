@@ -1,20 +1,24 @@
 /** @file uart_drv.c
-*   @brief Implementation of UART low level functionalities 
+*   @brief Implementation of UART read/write for Atmega328P 
 */
 #include "utils.h"
 #include "uart_drv.h"
+#include "uart_cfg.h"
+
+static const char SELFCHECK_STRING[] = "!UART DRV SELFCHECK!\n";
+
+/* Private functions */
+static void Uart_Selfcheck(void);
 
 /* Public functions */
 /**
  * @brief UART initialization
  * Function writes to appropriate registers to enable communication over UART. Frame format is 8data, 2stop bit.
- * @param f_cpu     MCU clock
- * @param baudrate  Target baudrate
  */
 
-void Uart_Init(uint32_t f_cpu, uint32_t baudrate){
+void Uart_Init(void){
     /* Set baud rate */
-    uint32_t ubrr = f_cpu/(16*baudrate)-1;
+    uint32_t ubrr = (uint32_t)F_CPU/(16*(uint32_t)UART_BAUDRATE)-1;
     Utils_WriteRegister((Register_T)&UBRR0H, (unsigned char)(ubrr>>8));
     Utils_WriteRegister((Register_T)&UBRR0L, (unsigned char)ubrr);
     
@@ -65,15 +69,34 @@ void Uart_Init(uint32_t f_cpu, uint32_t baudrate){
     
     /* Clear INT0 flag */
     // EIFR |= 1<<INTF0;
-
+    #ifdef SELFCHECK
+        Uart_Selfcheck();
+    #endif
 }
 
-void Uart_WriteBuffer(char c){
+/**
+ * @brief Write single character into UDR
+ * @param c char to be written
+ */
+void Uart_Write(char c){
     while ( !(UCSR0A & (1<<UDRE0)) )
     ;
     Utils_WriteRegister((Register_T)&UDR0, (uint8_t)c);
 }
 
-char Uart_ReadBuffer(){
+/**
+ * @brief Read data in UDR
+ * @return char data received from UDR
+ */
+char Uart_Read(){
     return Utils_ReadRegister((Register_T)&UDR0);
+}
+
+/**
+ * @brief Automatic check on driver init to let user know if driver is working correctly
+ */
+static void Uart_Selfcheck(void){
+    for(uint8_t i=0; i<sizeof(SELFCHECK_STRING)/sizeof(SELFCHECK_STRING[0]); i++){
+        Uart_Write(SELFCHECK_STRING[i]);
+    }
 }

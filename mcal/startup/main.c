@@ -4,7 +4,6 @@
 
 #include <avr/interrupt.h>
 #include <stdint.h>
-#include "config.h"
 #include <util/delay.h>
 #include "isr.h"
 #ifdef LOGGING_ENABLED
@@ -13,7 +12,8 @@
 #include "uart_drv.h"
 #include "logger_tx.h"
 // #include "MD_MotorDrv.h"
-// #include "I2C.h"
+// #include "os.h"
+#include "i2c_drv.h"
 // #include "LSD_LineSensorDrv.h"
 // #include "DSD_DistanceSensorDrv.h"
 // #include "ADC.h"
@@ -28,9 +28,10 @@
 int main(){
     /* Initialization */
     sei();
-    Uart_Init(F_CPU, BAUD);
+    Uart_Init();
 //     MDRV_Init();
-//     I2C_Init();
+    // os_init();
+    I2c_Init();
 //     LSD_Init();
 //     ADC_Init();
 //     Timer_Init();
@@ -38,8 +39,12 @@ int main(){
 //     CSD_Init();
 //     UIM_Init();
 //     LM_Init();
-    log_info_P(PROGMEM_ECU_INIT);
-//     while(1){ 
+    uint8_t x = 4;
+    INFO_P(PGM_ECU_INIT);
+    INFO("Test string 123 !@#");
+    WARNING("Test string 123 !@#");
+    ERROR("Test string 123 !@#");
+    while(1){ 
 //         // LM_Run();
 //         MDRV_Forward();
 //         // _delay_ms(1000);
@@ -70,11 +75,12 @@ int main(){
 //         MDRV_SetPWM(0);
 //         _delay_ms(1000);
 
-//         _delay_ms(500);
+        _delay_ms(2000);
+        logger_transmit();
 //         // uint16_t distance = 0;
 //         // distance = DSD_GetDistance();
 //         // log_data_1("Distance = %d", distance);
 //         // log_data_1("Mode = %d", UIM_GetMode());
-//     }
-//     return 0;
+    }
+    return 0;
 }

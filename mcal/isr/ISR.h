@@ -5,7 +5,6 @@
         @brief Interrupt Service Routines
         This file needs to be included in file with "main" function. ISRs are kept separated here for the purpose of clarity.
     */
-    #include "config.h"
     #include "os.h"
     // #include "DSD_DistanceSensorDrv.h"
     #include "timer0.h"

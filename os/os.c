@@ -3,6 +3,7 @@
 */
 #include <stdint.h>
 #include "os.h"
+#include "logger_tx.h"
 
 #define TASKS_TOTAL 8U
 #define ALIVE_TIMER_DEFUALT_VALUE 0U

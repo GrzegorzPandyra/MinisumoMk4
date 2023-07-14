@@ -8,7 +8,6 @@
 *   @note Functions ended with _cbk suffix are for debugging only!
 */
 #include <avr/io.h>
-#include "config.h"
 #include "utils.h"
 #include "motor_drv.h"
 #ifdef LOGGING_ENABLED
