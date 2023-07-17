@@ -68,7 +68,7 @@ static void logger_serialize(const Log_T log, Medium_Buffer_T *serialized_msg){
     BUFF_PUSH(*serialized_msg, SPACE_CHAR);
 
     /* Payload */
-    if(log.msg_id == IRRELEVANT_ID){
+    if(log.msg_id == ID_NONE){
         memcpy(BUFF_HEAD(*serialized_msg), (const void *) log.msg_str, strlen(log.msg_str));
         (*serialized_msg).data_length += (uint16_t)strlen(log.msg_str);
     } else {

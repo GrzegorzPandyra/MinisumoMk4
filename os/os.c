@@ -5,11 +5,11 @@
 #include "os.h"
 #include "logger_tx.h"
 
-#define TASKS_TOTAL 8U
+#define OS_TASKS_TOTAL 8U
 #define ALIVE_TIMER_DEFUALT_VALUE 0U
 
 /* Custom types */
-enum TaskType {INIT, PERIODIC};
+enum TaskType {INIT, PERIODIC, TRIGGERED};
 /**
  * @brief Task structure
  * @var type - can be INIT or PERIODIC
@@ -28,7 +28,7 @@ typedef struct{
  * @var alive_timer - timer counting how long OS is alive
  */
 typedef struct{
-    Task_T tasks[TASKS_TOTAL];
+    Task_T tasks[OS_TASKS_TOTAL];
     uint32_t alive_timer;
 } Os_T;
 
@@ -44,14 +44,14 @@ static void os_task_5000ms(void);
 /* Local variables */
 static Os_T os = {
     {
-        {INIT,     0U,    &os_init          },
-        {PERIODIC, 1U,    &os_task_1ms      },
-        {PERIODIC, 10U,   &os_task_10ms     },
-        {PERIODIC, 100U,  &os_task_100ms    },
-        {PERIODIC, 500U,  &os_task_500ms    },
-        {PERIODIC, 1000U, &os_task_1000ms   },
-        {PERIODIC, 2000U, &os_task_2000ms   },
-        {PERIODIC, 5000U, &os_task_5000ms   }
+        {INIT,     0U,    &os_init       },
+        {PERIODIC, 1U,    &os_task_1ms   },
+        {PERIODIC, 10U,   &os_task_10ms  },
+        {PERIODIC, 100U,  &os_task_100ms },
+        {PERIODIC, 500U,  &os_task_500ms },
+        {PERIODIC, 1000U, &os_task_1000ms},
+        {PERIODIC, 2000U, &os_task_2000ms},
+        {PERIODIC, 5000U, &os_task_5000ms}
     },
     ALIVE_TIMER_DEFUALT_VALUE
 };
@@ -69,7 +69,7 @@ void os_init(void){
 void os_run(void){
     Task_T *current_task;
     os.alive_timer++;
-    for(uint8_t i=0; i<TASKS_TOTAL; i++){
+    for(uint8_t i=0u; i<OS_TASKS_TOTAL; i++){
         current_task = &os.tasks[i];
         if((current_task->type == PERIODIC) && (os.alive_timer%current_task->period_ms == 0)){
             current_task->task_handler();

@@ -39,11 +39,9 @@ int main(){
 //     CSD_Init();
 //     UIM_Init();
 //     LM_Init();
-    uint8_t x = 4;
     INFO_P(PGM_ECU_INIT);
-    INFO("Test string 123 !@#");
-    WARNING("Test string 123 !@#");
-    ERROR("Test string 123 !@#");
+//     while(1){ 
+    INFO_P(PGM_OS_INIT);
     while(1){ 
 //         // LM_Run();
 //         MDRV_Forward();
