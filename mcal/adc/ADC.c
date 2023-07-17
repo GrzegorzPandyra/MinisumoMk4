@@ -4,14 +4,12 @@
 */
 #include "utils.h"
 #include "adc.h"
-#ifdef LOGGING_ENABLED
-    #include "logging.h"
-#endif
+#include "logger_tx.h"
 
 /**
  * @brief Initialize the ADC
  */
-void ADC_Init(void){
+void Adc_Init(void){
     /* Set prescaler to 128 */
     Utils_SetBit((Register_T)&ADCSRA, ADPS0, BIT_SET);
     Utils_SetBit((Register_T)&ADCSRA, ADPS1, BIT_SET);
@@ -44,7 +42,5 @@ void ADC_Init(void){
     /* Trigger the first conversion */
     Utils_SetBit((Register_T)&ADCSRA, ADSC , BIT_SET);
     
-    #ifdef LOGGING_ENABLED
-        log_info_P(PROGMEM_ADC_INIT);
-    #endif
+    INFO_P(PGM_ADC_INIT);
 } 

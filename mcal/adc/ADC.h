@@ -5,6 +5,6 @@
     @brief API for Analog-Digital Converter
 */
 
-void ADC_Init(void);
+void Adc_Init(void);
 
 #endif /* ADC_GUARD */

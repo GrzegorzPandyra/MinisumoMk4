@@ -10,9 +10,7 @@
 #include <avr/io.h>
 #include "utils.h"
 #include "motor_drv.h"
-#ifdef LOGGING_ENABLED
-    #include "logging.h"
-#endif
+#include "logger_tx.h"
 
 #define PWM_INIT 30
 #define PWM_MAX 100
@@ -91,8 +89,6 @@ void Mdrv_PWMHandler(void){
  */
 void Mdrv_Init(void){
     Utils_SetBit((Register_T)&DDRC, PWM_PIN, BIT_SET);
-    #ifdef LOGGING_ENABLED
-        log_info_P(PROGMEM_MDRV_INIT);
-    #endif
+    INFO_P(PGM_MDRV_INIT);
 }
 

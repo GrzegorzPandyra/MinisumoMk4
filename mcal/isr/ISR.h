@@ -26,7 +26,7 @@
      * @brief ISR executed when Timer0 reaches value in OCR0A
      */
     ISR(TIMER0_COMPA_vect){  
-        os_run();
+        Os_Run();
         Timer0_Clear();
     }
 

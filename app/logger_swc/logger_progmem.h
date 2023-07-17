@@ -35,7 +35,8 @@
         PGM_INFO,
         PGM_WARNING,
         PGM_ERROR,
-        PGM_DATA
+        PGM_DATA,
+        PGM_OVFL_ERROR
     } Progmem_Table_Index_T;
 
     /* Global variables */

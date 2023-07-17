@@ -20,6 +20,7 @@ static const char PGM_DATA_LOGTYPE_INFO[]       PROGMEM = "INFO";
 static const char PGM_DATA_LOGTYPE_WARNING[]    PROGMEM = "WARNING";
 static const char PGM_DATA_LOGTYPE_ERROR[]      PROGMEM = "ERROR";
 static const char PGM_DATA_LOGTYPE_DATA[]       PROGMEM = "DATA";
+static const char PGM_DATA_OVFL_ERROR[]         PROGMEM = "TX OVERFLOW";
 
 
 Small_Buffer_T BUFFER(flash_to_ram_buffer); 
@@ -40,5 +41,6 @@ const char* const PGM_DATA_LIST[] PROGMEM = {
     PGM_DATA_LOGTYPE_INFO,
     PGM_DATA_LOGTYPE_WARNING,
     PGM_DATA_LOGTYPE_ERROR,
-    PGM_DATA_LOGTYPE_DATA
+    PGM_DATA_LOGTYPE_DATA,
+    PGM_DATA_OVFL_ERROR
 };

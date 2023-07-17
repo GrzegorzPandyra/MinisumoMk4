@@ -12,6 +12,7 @@
 #define BUFF_PUSH(buff, val) (buff).data[(buff).data_length]=(val); \
                         (buff).data_length++
 #define BUFF_HEAD(buff) ((buff).data + (buff).data_length)
+#define BUFF_CHECK_OVERFLOW(buff) (((buff).data_length+1<=sizeof((buff).data))?1u:0u)
 
 typedef struct Small_Buffer_Tag{
     char data[BUFFER_SIZE_SMALL];
@@ -25,7 +26,7 @@ typedef struct Medium_Buffer_Tag{
 
 typedef struct Large_Buffer_Tag{
     char data[BUFFER_SIZE_LARGE];
-    uint8_t data_length;
+    uint16_t data_length;
 }Large_Buffer_T;
 
 #endif /* BUFFER_GUARD */

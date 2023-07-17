@@ -4,9 +4,7 @@
 */
 #include "utils.h"
 #include "timer0.h"
-#ifdef LOGGING_ENABLED
-    #include "logging.h"
-#endif
+#include "logger_tx.h"
 
 #define TIMER0_COMPA 250
 
@@ -25,9 +23,7 @@ void Timer0_Init(void){
     /* Set compare value A for timer0 */
     Utils_WriteRegister((Register_T)&OCR0A, TIMER0_COMPA);
 
-    #ifdef LOGGING_ENABLED
-        log_info_P(PROGMEM_TIMER_INIT);
-    #endif
+    INFO_P(PGM_TIMER_INIT);
 }
 
 void Timer0_Clear(void){

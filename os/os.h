@@ -1,7 +1,7 @@
 #ifndef OS_GUARD
 #define OS_GUARD
 
-void os_init(void);
-void os_run(void);
+void Os_Init(void);
+void Os_Run(void);
 
 #endif /* OS_GUARD */

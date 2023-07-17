@@ -4,9 +4,7 @@
 #include <stddef.h>
 #include "utils.h"
 #include "distance_sensor_drv.h"
-#ifdef LOGGING_ENABLED
-    #include "logging.h"
-#endif
+#include "logger_tx.h"
 
 #define MAX_NUM_SAMPLES 5
 #define DS_PIN PC0
@@ -26,9 +24,7 @@ static Distance_Sensor_T ds_sensor = {{0}, 0, NULL};
 /** @brief Initialize the module
 */
 void Dsd_Init(void){
-    #ifdef LOGGING_ENABLED
-        log_info_P(PROGMEM_DSD_INIT);
-    #endif
+    INFO_P(PGM_DSD_INIT);
     /* Set DS pins as input */
     Utils_SetBit((Register_T) &DDRC, DS_PIN, BIT_CLEARED);
     /* Initialize sample_ptr */

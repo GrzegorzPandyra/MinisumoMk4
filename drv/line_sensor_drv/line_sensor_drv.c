@@ -3,16 +3,12 @@
 */
 #include "line_sensor_drv.h"
 #include "i2c_drv.h"
-#ifdef LOGGING_ENABLED
-    #include "logging.h"
-#endif
+#include "logger_tx.h"
 
 /** @brief Initialize the module
 */
-void Lsd_Init(void){
-    #ifdef LOGGING_ENABLED
-        log_info_P(PROGMEM_LSD_INIT);
-    #endif
+void Ls_Init(void){
+    INFO_P(PGM_LSD_INIT);
 }
 
 /** @brief Get status of all line sensors
@@ -21,7 +17,7 @@ void Lsd_Init(void){
             1: sensor idle
             0: sensor triggered
 */
-uint8_t Lsd_GetLineStatus(void){
+uint8_t Ls_GetLineStatus(void){
     uint8_t data = 0;
     I2c_Receive(&data);
     // log_data_2("LS state F=0x%x R=0x%x", data&0x0F, data&0xF0);

@@ -98,7 +98,17 @@ void logger_log(const Log_T log){
     logger_serialize(log, &serialized_message);
     for(uint16_t i=0U; i<serialized_message.data_length; i++){
         #if BUFFERING_ENABLED
-            BUFF_PUSH(logger_tx_buffer, serialized_message.data[i]);
+            if(BUFF_CHECK_OVERFLOW(logger_tx_buffer)){
+                BUFF_PUSH(logger_tx_buffer, serialized_message.data[i]);
+            } else {
+                #if TRANSMIT_WHEN_TX_OVFL
+                    logger_transmit();
+                    Uart_Write(NEWLINE_CHAR);
+                #else
+                    BUFF_CLEAR(logger_tx_buffer);   
+                #endif
+                ERROR_P(PGM_OVFL_ERROR);
+            }
         #else
             Uart_Write(serialized_message.data[i]);
         #endif

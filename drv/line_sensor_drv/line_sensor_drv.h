@@ -25,6 +25,6 @@ x x x               x x x
 
 #define LS_NOT_TRIGGERED 0xFF
 
-void Lsd_Init(void);
-uint8_t Lsd_GetLineStatus(void);
+void Ls_Init(void);
+uint8_t Ls_GetLineStatus(void);
 #endif /* LSD_GUARD */
