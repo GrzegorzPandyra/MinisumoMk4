@@ -121,6 +121,9 @@ static void Os_Task_500ms(void){
 
 static void Os_Task_1000ms(void){
     // INFO("1000ms task");
+    #if ENABLE_LS_DIAGNOSTICS
+        Ls_RunDiagnostics();
+    #endif
 }
 
 static void Os_Task_2000ms(void){

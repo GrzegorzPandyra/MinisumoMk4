@@ -24,6 +24,8 @@ typedef struct Log_Tag{
     const char *msg_str;
 } Log_T;
 
+extern Medium_Buffer_T logger_data_buffer;
+
 /** Logging API */
 #define PACK_LOG(type, msg_id, msg_str)  (Log_T){__FILE__, __LINE__, type, msg_id, msg_str}
 
@@ -37,24 +39,24 @@ typedef struct Log_Tag{
 
     #define ERROR(str)   logger_log(PACK_LOG(PGM_ERROR, ID_NONE, str))
     #define ERROR_P(id)  logger_log(PACK_LOG(PGM_ERROR, id     , NULL))                          
-/*
-#define DATA1(format, arg1)                                            sprintf(flash_to_ram_buffer.data, format, arg1); \
-                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, flash_to_ram_buffer.data))
-#define DATA2(format, arg1, arg2)                                      sprintf(flash_to_ram_buffer.data, format, arg1, arg2); \
-                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, flash_to_ram_buffer.data))
-#define DATA3(format, arg1,arg2, arg3)                                 sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3); \
-                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, flash_to_ram_buffer.data))
-#define DATA4(format, arg1, arg2, arg3, arg4)                          sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4); \
-                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, flash_to_ram_buffer.data))
-#define DATA5(format, arg1, arg2, arg3, arg4, arg5)                    sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4, arg5); \
-                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, flash_to_ram_buffer.data))
-#define DATA6(format, arg1, arg2, arg3, arg4, arg5, arg6)              sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6); \
-                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, flash_to_ram_buffer.data))
-#define DATA7(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7)        sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6, arg7); \
-                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, flash_to_ram_buffer.data))
-#define DATA8(format, arg1, arg2, arg3, arg4, arg5,arg6, arg7, arg8)   sprintf(flash_to_ram_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8); \
-                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, flash_to_ram_buffer.data))                                                                           
-*/
+
+#define DATA1(format, arg1)                                            sprintf(logger_data_buffer.data, format, arg1); \
+                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, logger_data_buffer.data))
+#define DATA2(format, arg1, arg2)                                      sprintf(logger_data_buffer.data, format, arg1, arg2); \
+                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, logger_data_buffer.data))
+#define DATA3(format, arg1,arg2, arg3)                                 sprintf(logger_data_buffer.data, format, arg1, arg2, arg3); \
+                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, logger_data_buffer.data))
+#define DATA4(format, arg1, arg2, arg3, arg4)                          sprintf(logger_data_buffer.data, format, arg1, arg2, arg3, arg4); \
+                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, logger_data_buffer.data))
+#define DATA5(format, arg1, arg2, arg3, arg4, arg5)                    sprintf(logger_data_buffer.data, format, arg1, arg2, arg3, arg4, arg5); \
+                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, logger_data_buffer.data))
+#define DATA6(format, arg1, arg2, arg3, arg4, arg5, arg6)              sprintf(logger_data_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6); \
+                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, logger_data_buffer.data))
+#define DATA7(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7)        sprintf(logger_data_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6, arg7); \
+                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, logger_data_buffer.data))
+#define DATA8(format, arg1, arg2, arg3, arg4, arg5,arg6, arg7, arg8)   sprintf(logger_data_buffer.data, format, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8); \
+                                                                       logger_log(PACK_LOG(PGM_DATA, ID_NONE, logger_data_buffer.data))                                                                           
+
 #else
     #define INFO(str)   
     #define INFO_P(id)
