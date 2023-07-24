@@ -6,14 +6,14 @@
         This file needs to be included in file with "main" function. ISRs are kept separated here for the purpose of clarity.
     */
     #include "os.h"
-    // #include "DSD_DistanceSensorDrv.h"
+    #include "distance_sensor_drv.h"
     #include "timer0.h"
 
     /**
      * @brief ISR executed when ADC completes conversion
      */
     ISR(ADC_vect){  
-        // DSD_ConversionCallback();
+        Dsdrv_ConversionCallback();
     }
 
     /**

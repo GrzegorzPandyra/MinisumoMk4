@@ -86,7 +86,7 @@ void Os_Init(void){
     I2c_Init();
     Ls_Init();
     Adc_Init();
-    Dsd_Init();
+    Dsdrv_Init();
     os.status = OS_INITIALIZED;
     sei();
 }
@@ -116,13 +116,17 @@ static void Os_Task_100ms(void){
 }
 
 static void Os_Task_500ms(void){
-    
+    Dsdrv_GetDistance();
 }
 
 static void Os_Task_1000ms(void){
     // INFO("1000ms task");
     #if ENABLE_LS_DIAGNOSTICS
         Ls_RunDiagnostics();
+    #endif
+
+    #if ENABLE_DS_DIAGNOSTICS
+        Dsdrv_RunDiagnostics();
     #endif
 }
 
