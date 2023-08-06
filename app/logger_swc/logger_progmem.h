@@ -36,7 +36,17 @@
         PGM_WARNING,
         PGM_ERROR,
         PGM_DATA,
-        PGM_OVFL_ERROR
+        PGM_OVFL_ERROR,
+        PGM_MDRV_DIAG_FORWARD,
+        PGM_MDRV_DIAG_BACKWARD,
+        PGM_MDRV_DIAG_TURN_RIGHT,
+        PGM_MDRV_DIAG_TURN_LEFT,
+        PGM_MDRV_DIAG_PWM20,
+        PGM_MDRV_DIAG_PWM40,
+        PGM_MDRV_DIAG_PWM60,
+        PGM_MDRV_DIAG_PWM80,
+        PGM_MDRV_DIAG_PWM100,
+        PGM_MDRV_DIAG_STOP
     } Progmem_Table_Index_T;
 
     /* Global variables */

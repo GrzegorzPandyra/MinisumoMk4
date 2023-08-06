@@ -105,7 +105,7 @@ void Os_Run(void){
 }
 
 static void Os_Task_1ms(void){
-
+    Mdrv_PWMHandler();
 }
 
 static void Os_Task_10ms(void){
@@ -131,9 +131,12 @@ static void Os_Task_1000ms(void){
 }
 
 static void Os_Task_2000ms(void){
+    #ifdef ENABLE_MDRV_DIAGNOSTICS
+        Mdrv_Selfcheck();
+    #endif
     // INFO("2000ms task");
 }
 
 static void Os_Task_5000ms(void){
-    INFO("5000ms task");
+    // INFO("5000ms task");
 }
