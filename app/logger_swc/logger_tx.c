@@ -21,7 +21,7 @@
 
 /* Local static variables */
 Large_Buffer_T BUFFER(logger_tx_buffer); 
-Medium_Buffer_T BUFFER(logger_data_buffer); 
+Large_Buffer_T BUFFER(logger_data_buffer); 
 
 /* Local static functions */
 static void get_filename_from_path(Medium_Buffer_T *buff, const char *path);

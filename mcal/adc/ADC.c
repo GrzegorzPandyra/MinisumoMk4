@@ -57,10 +57,14 @@ void Adc_SetChannel(Adc_Channel_T channel){
             Utils_SetBit((Register_T)&ADMUX, MUX3, BIT_CLEARED);
         break;
         default: 
-            Utils_SetBit((Register_T)&ADMUX, MUX0, BIT_CLEARED);
-            Utils_SetBit((Register_T)&ADMUX, MUX1, BIT_CLEARED);
-            Utils_SetBit((Register_T)&ADMUX, MUX2, BIT_CLEARED);
-            Utils_SetBit((Register_T)&ADMUX, MUX3, BIT_CLEARED);
+            Utils_SetBit((Register_T)&ADMUX, MUX0, BIT_SET);
+            Utils_SetBit((Register_T)&ADMUX, MUX1, BIT_SET);
+            Utils_SetBit((Register_T)&ADMUX, MUX2, BIT_SET);
+            Utils_SetBit((Register_T)&ADMUX, MUX3, BIT_SET);
         break;
     }
+}
+
+volatile uint16_t ADC_GetValue(void){
+    return Utils_ReadRegister16((Register16_T)&ADC);
 }

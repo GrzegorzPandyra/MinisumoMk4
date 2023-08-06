@@ -24,7 +24,7 @@ typedef struct Log_Tag{
     const char *msg_str;
 } Log_T;
 
-extern Medium_Buffer_T logger_data_buffer;
+extern Large_Buffer_T logger_data_buffer;
 
 /** Logging API */
 #define PACK_LOG(type, msg_id, msg_str)  (Log_T){__FILE__, __LINE__, type, msg_id, msg_str}

@@ -75,7 +75,7 @@ clean:
 	$(info ### Clean finished! ###)
 #memory analysis
 mem: minisumo_mk4.elf 
-	avr-size --format=berkeley ../out/minisumo_mk4.elf
+	avr-size --format=berkeley --common --totals ../out/minisumo_mk4.elf
 
 #just decoration
 print_ok:

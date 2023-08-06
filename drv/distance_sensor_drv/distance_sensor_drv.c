@@ -44,57 +44,59 @@ void Dsdrv_Init(void){
     @param none
     @return distance (only measure), the higher the value, the closer the target
 */
-uint16_t Dsdrv_GetDistance(void){
+Ds_Output_T Dsdrv_GetDistance(void){
     // uint16_t result = 0;
     // for(uint8_t i=0; i<ds_sensor.samples_stored_cnt; i++){
     //     result += ds_sensor.samples[i];
     // }
     // return result/(uint16_t)ds_sensor.samples_stored_cnt;
+    Ds_Output_T output = {ds_left.samples[0], ds_right.samples[0]};
+    return output;
 }
 
 /** @brief Write new value to sensor buffer. Called in ISR when ADC conversion is finished.
     @return none
 */
 void Dsdrv_ConversionCallback(){
-    volatile uint16_t adc_value = Utils_ReadRegister16((Register16_T)&ADC);
-    *(active_ds->sample_ptr) = adc_value;
+    volatile uint16_t adc_value = ADC_GetValue();
+    // *(active_ds->sample_ptr) = adc_value;
+    active_ds->samples[0] = adc_value;
+    // if(active_ds->sample_ptr == &(active_ds->samples[MAX_NUM_SAMPLES-1])){
+    //     active_ds->sample_ptr = active_ds->samples;
+    // } else {
+    //     active_ds->sample_ptr++;
+    // }
 
-    if(active_ds->sample_ptr == &(active_ds->samples[MAX_NUM_SAMPLES-1])){
-        active_ds->sample_ptr = active_ds->samples;
-    } else {
-        active_ds->sample_ptr++;
-    }
-
-    if(active_ds->samples_stored_cnt < MAX_NUM_SAMPLES){
-        active_ds->samples_stored_cnt++;
-    }
+    // if(active_ds->samples_stored_cnt < MAX_NUM_SAMPLES){
+    //     active_ds->samples_stored_cnt++;
+    // }
 
      switch(active_ds->channel){
         case CHANNEL0:
             active_ds = &ds_right;
-            Adc_SetChannel(CHANNEL1);
         break;
         case CHANNEL1:
             active_ds = &ds_left;
-            Adc_SetChannel(CHANNEL0);
         break;
         default: 
+            ERROR("Invalid channel");
         break;
     }
+    Adc_SetChannel(active_ds->channel);
 }
 
 #if ENABLE_DS_DIAGNOSTICS
     void Dsdrv_RunDiagnostics(void){
-        char left_str[50] = {'\0'};
-        char right_str[50] = {'\0'};
+        char left_str[100] = {'\0'};
+        char right_str[100] = {'\0'};
         uint8_t i;
-        for(i=0; i<*(ds_left.sample_ptr)/10; i++){
+        for(i=0; i<ds_left.samples[0]/10; i++){
             left_str[i] = '=';
         }
-        for(i=0; i<*(ds_right.sample_ptr)/10; i++){
+        for(i=0; i<ds_right.samples[0]/10; i++){
             right_str[i] = '=';
         }
-        DATA2("LEFT DS : %d %s\n", *(ds_left.sample_ptr),  left_str);
-        DATA2("RIGHT DS: %d %s\n", *(ds_right.sample_ptr), right_str);
+        DATA2("LEFT DS: %u %s\n", ds_left.samples[0],  left_str);
+        DATA2("RIGHT DS: %u %s\n", ds_right.samples[0], right_str);
     }
 #endif

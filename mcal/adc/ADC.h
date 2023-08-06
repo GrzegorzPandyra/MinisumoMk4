@@ -12,5 +12,6 @@ typedef enum {
 
 void Adc_Init(void);
 void Adc_SetChannel(Adc_Channel_T channel);
+volatile uint16_t ADC_GetValue(void);
 
 #endif /* ADC_GUARD */
