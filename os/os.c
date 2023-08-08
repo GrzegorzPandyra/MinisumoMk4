@@ -14,6 +14,7 @@
 #include "i2c_drv.h"
 #include "line_sensor_drv.h"
 #include "distance_sensor_drv.h"
+#include "user_input_drv.h"
 /* SWCs */
 #include "logger_tx.h"
 
@@ -128,12 +129,23 @@ static void Os_Task_1000ms(void){
     #if ENABLE_DS_DIAGNOSTICS
         Dsdrv_RunDiagnostics();
     #endif
+    #if ENABLE_UIM_DIAGNOSTICS
+        UIM_SetStatusLed1(LED_ON);
+        UIM_SetStatusLed2(LED_ON);
+    #endif
 }
 
 static void Os_Task_2000ms(void){
     #ifdef ENABLE_MDRV_DIAGNOSTICS
         Mdrv_Selfcheck();
     #endif
+
+    #ifdef ENABLE_UIM_DIAGNOSTICS
+        UIM_GetStartBtnState();
+        UIM_GetMode();
+        UIM_SetStatusLed1(LED_OFF);
+        UIM_SetStatusLed2(LED_OFF);
+    #endif 
     // INFO("2000ms task");
 }
 
