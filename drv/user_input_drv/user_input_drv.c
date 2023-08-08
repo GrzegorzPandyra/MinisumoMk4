@@ -31,7 +31,7 @@
 
 /** @brief Initialize the module
 */
-void UIM_Init(void){
+void Uidrv_Init(void){
     /* Set pins as inputs */
     Utils_SetBit((Register_T)&MODE_SELECT_H_DDR, MODE_SELECT_H, BIT_CLEARED);
     Utils_SetBit((Register_T)&MODE_SELECT_H_DDR, MODE_SELECT_L, BIT_CLEARED);
@@ -47,18 +47,17 @@ void UIM_Init(void){
     Utils_SetBit((Register_T)&PORTD, MODE_SELECT_L, BIT_SET);
     Utils_SetBit((Register_T)&PORTD, START_BTN, BIT_SET);
     #endif
-    INFO_P(PGM_UIM_INIT);
+    INFO_P(PGM_UIDRV_INIT);
 }
 
 /**
  * @brief Return one of four predefined modes
  * @return uint8_t mode ID
  */
-uint8_t UIM_GetMode(void)
+uint8_t Uidrv_GetMode(void)
 {
     uint8_t mode_h = Utils_GetBit((Register_T)&MODE_SELECT_H_PIN, MODE_SELECT_H);
     uint8_t mode_l = Utils_GetBit((Register_T)&MODE_SELECT_L_PIN, MODE_SELECT_L);
-    DATA1("Mode %d\n", ((mode_h<<1) | mode_l));
     return ((mode_h<<1) | mode_l);
 }
 
@@ -66,7 +65,7 @@ uint8_t UIM_GetMode(void)
  * @brief Return state of start btn
  * @return uint8_t start btn status
  */
-Btn_State_T UIM_GetStartBtnState(void)
+Btn_State_T Uidrv_GetStartBtnState(void)
 {
     // DATA1("startbtn %d\n", Utils_GetBit((Register_T)&START_BTN_PIN, START_BTN));
     return Utils_GetBit((Register_T)&START_BTN_PIN, START_BTN)?BTN_RELEASED:BTN_PRESSED;
@@ -77,7 +76,7 @@ Btn_State_T UIM_GetStartBtnState(void)
  * 
  * @param led_status 1 - set, 0 - unset
  */
-void UIM_SetStatusLed1(Led_Status_T led_status){
+void Uidrv_SetStatusLed1(Led_Status_T led_status){
     Utils_SetBit((Register_T)&STATUS_LED_1_PORT, STATUS_LED_1, (uint8_t)led_status);
 }
 
@@ -86,6 +85,36 @@ void UIM_SetStatusLed1(Led_Status_T led_status){
  * 
  * @param led_status 1 - set, 0 - unset
  */
-void UIM_SetStatusLed2(Led_Status_T led_status){
+void Uidrv_SetStatusLed2(Led_Status_T led_status){
     Utils_SetBit((Register_T)&STATUS_LED_2_PORT, STATUS_LED_2, (uint8_t)led_status);
+}
+
+/**
+ * @brief Perform Uidrv diagnostics - requires ENABLE_MDRV_DIAGNOSTICS flag
+ */
+void Uidrv_RunDiagnostics1(void){
+        Uidrv_SetStatusLed1(LED_ON);
+        Uidrv_SetStatusLed2(LED_ON);
+}
+
+/**
+ * @brief Perform Uidrv diagnostics - requires ENABLE_MDRV_DIAGNOSTICS flag
+ */
+void Uidrv_RunDiagnostics2(void){
+    uint8_t mode = 0xFF;
+    mode = Uidrv_GetMode();
+    DATA1("Mode %d\n", mode);
+    Uidrv_SetStatusLed1(LED_OFF);
+    Uidrv_SetStatusLed2(LED_OFF);
+}
+
+/**
+ * @brief Perform Uidrv diagnostics - requires ENABLE_MDRV_DIAGNOSTICS flag
+ */
+void Uidrv_RunDiagnostics3(void){
+    Btn_State_T btn_state = BTN_RELEASED;
+    btn_state = Uidrv_GetStartBtnState();
+    if(btn_state == BTN_PRESSED){
+        INFO("START button pressed");
+    }
 }

@@ -117,6 +117,10 @@ static void Os_Task_100ms(void){
 }
 
 static void Os_Task_500ms(void){
+    #if ENABLE_UIM_DIAGNOSTICS
+        Uidrv_RunDiagnostics3();
+    #endif
+
     Dsdrv_GetDistance();
 }
 
@@ -129,9 +133,9 @@ static void Os_Task_1000ms(void){
     #if ENABLE_DS_DIAGNOSTICS
         Dsdrv_RunDiagnostics();
     #endif
+
     #if ENABLE_UIM_DIAGNOSTICS
-        UIM_SetStatusLed1(LED_ON);
-        UIM_SetStatusLed2(LED_ON);
+        Uidrv_RunDiagnostics1();
     #endif
 }
 
@@ -141,10 +145,7 @@ static void Os_Task_2000ms(void){
     #endif
 
     #ifdef ENABLE_UIM_DIAGNOSTICS
-        UIM_GetStartBtnState();
-        UIM_GetMode();
-        UIM_SetStatusLed1(LED_OFF);
-        UIM_SetStatusLed2(LED_OFF);
+        Uidrv_RunDiagnostics2();
     #endif 
     // INFO("2000ms task");
 }

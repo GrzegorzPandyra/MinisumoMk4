@@ -30,7 +30,7 @@
         PGM_TIMER_INIT,
         PGM_CSD_INIT,
         PGM_LM_INIT,
-        PGM_UIM_INIT,
+        PGM_UIDRV_INIT,
         PGM_OS_INIT,
         PGM_INFO,
         PGM_WARNING,

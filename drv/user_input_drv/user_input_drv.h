@@ -1,6 +1,6 @@
 
-#ifndef UIM_GUARD
-#define UIM_GUARD
+#ifndef UIDRV_GUARD
+#define UIDRV_GUARD
 #include <stdint.h>
 
 typedef enum {
@@ -13,10 +13,13 @@ typedef enum {
     LED_ON = 1
 } Led_Status_T;
 
-void UIM_Init(void);
-uint8_t UIM_GetMode(void);
-Btn_State_T UIM_GetStartBtnState(void);
-void UIM_SetStatusLed1(Led_Status_T bit_status);
-void UIM_SetStatusLed2(Led_Status_T bit_status);
+void Uidrv_Init(void);
+uint8_t Uidrv_GetMode(void);
+Btn_State_T Uidrv_GetStartBtnState(void);
+void Uidrv_SetStatusLed1(Led_Status_T bit_status);
+void Uidrv_SetStatusLed2(Led_Status_T bit_status);
+void Uidrv_RunDiagnostics1(void);
+void Uidrv_RunDiagnostics2(void);
+void Uidrv_RunDiagnostics3(void);
 
-#endif /* UIM_GUARD */
+#endif /* UIDRV_GUARD */
