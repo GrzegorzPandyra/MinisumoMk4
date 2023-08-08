@@ -96,7 +96,8 @@ void Dsdrv_ConversionCallback(){
         for(i=0; i<ds_right.samples[0]/10; i++){
             right_str[i] = '=';
         }
-        DATA2("LEFT DS: %u %s\n", ds_left.samples[0],  left_str);
+        /* Alignment to keep display even */
+        DATA2(" LEFT DS: %u %s\n", ds_left.samples[0],  left_str);
         DATA2("RIGHT DS: %u %s\n", ds_right.samples[0], right_str);
     }
 #endif
