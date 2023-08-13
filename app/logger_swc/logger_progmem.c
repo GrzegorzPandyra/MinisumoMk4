@@ -13,7 +13,7 @@ static const char PGM_DATA_DSD_INIT[]               PROGMEM = "DS drv init";
 static const char PGM_DATA_ADC_INIT[]               PROGMEM = "ADC init";
 static const char PGM_DATA_TIMER_INIT[]             PROGMEM = "Timer init";
 static const char PGM_DATA_CSD_INIT[]               PROGMEM = "CSD init";
-static const char PGM_DATA_LM_INIT[]                PROGMEM = "LM init";
+static const char PGM_DATA_BEH_INIT[]               PROGMEM = "BEH init";
 static const char PGM_DATA_UIM_INIT[]               PROGMEM = "UIM init";
 static const char PGM_DATA_OS_INIT[]                PROGMEM = "OS init";
 static const char PGM_DATA_LOGTYPE_INFO[]           PROGMEM = "INFO";
@@ -46,7 +46,7 @@ const char* const PGM_DATA_LIST[] PROGMEM = {
     PGM_DATA_ADC_INIT,
     PGM_DATA_TIMER_INIT,
     PGM_DATA_CSD_INIT,
-    PGM_DATA_LM_INIT,
+    PGM_DATA_BEH_INIT,
     PGM_DATA_UIM_INIT,
     PGM_DATA_OS_INIT,
     PGM_DATA_LOGTYPE_INFO,

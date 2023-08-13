@@ -18,8 +18,10 @@ uint8_t Uidrv_GetMode(void);
 Btn_State_T Uidrv_GetStartBtnState(void);
 void Uidrv_SetStatusLed1(Led_Status_T bit_status);
 void Uidrv_SetStatusLed2(Led_Status_T bit_status);
-void Uidrv_RunDiagnostics1(void);
-void Uidrv_RunDiagnostics2(void);
-void Uidrv_RunDiagnostics3(void);
+void Uidrv_Diagnostics_Full1(void);
+void Uidrv_Diagnostics_Full2(void);
+void Uidrv_Diagnostics_Full3(void);
+void Uidrv_Diagnostics_Heartbeat1(void);
+void Uidrv_Diagnostics_Heartbeat2(void);
 
 #endif /* UIDRV_GUARD */

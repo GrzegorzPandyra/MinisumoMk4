@@ -29,7 +29,7 @@
         PGM_ADC_INIT,
         PGM_TIMER_INIT,
         PGM_CSD_INIT,
-        PGM_LM_INIT,
+        PGM_BEH_INIT,
         PGM_UIDRV_INIT,
         PGM_OS_INIT,
         PGM_INFO,

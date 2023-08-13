@@ -18,6 +18,7 @@
 /* SWCs */
 #include "logger_tx.h"
 #include "state_machine.h"
+#include "behavior.h"
 
 #define OS_TASKS_TOTAL 8U
 #define ALIVE_TIMER_DEFUALT_VALUE 0U
@@ -90,6 +91,7 @@ void Os_Init(void){
     Adc_Init();
     Dsdrv_Init();
     Sm_Init();
+    // BEH_Init();
 
     os.status = OS_INITIALIZED;
     sei();
@@ -117,11 +119,16 @@ static void Os_Task_10ms(void){
 }
 
 static void Os_Task_100ms(void){
+    BEH_Run();
 }
 
 static void Os_Task_500ms(void){
-    #if ENABLE_UIM_DIAGNOSTICS
-        Uidrv_RunDiagnostics3();
+    #if ENABLE_UIM_FULL_DIAGNOSTICS
+        Uidrv_Diagnostics_Full3();
+    #endif
+
+    #if ENABLE_UIM_HEARTBEAT_ONLY
+        Uidrv_Diagnostics_Heartbeat1();
     #endif
 
     Dsdrv_GetDistance();
@@ -137,9 +144,13 @@ static void Os_Task_1000ms(void){
         Dsdrv_RunDiagnostics();
     #endif
 
-    #if ENABLE_UIM_DIAGNOSTICS
-        Uidrv_RunDiagnostics1();
+    #if ENABLE_UIM_FULL_DIAGNOSTICS
+        Uidrv_Diagnostics_Full1();
     #endif
+
+    #ifdef ENABLE_UIM_HEARTBEAT_ONLY
+        Uidrv_Diagnostics_Heartbeat2();
+    #endif 
 }
 
 static void Os_Task_2000ms(void){
@@ -147,8 +158,8 @@ static void Os_Task_2000ms(void){
         Mdrv_Selfcheck();
     #endif
 
-    #ifdef ENABLE_UIM_DIAGNOSTICS
-        Uidrv_RunDiagnostics2();
+    #ifdef ENABLE_UIM_FULL_DIAGNOSTICS
+        Uidrv_Diagnostics_Full2();
     #endif 
     // INFO("2000ms task");
 }

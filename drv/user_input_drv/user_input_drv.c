@@ -92,29 +92,41 @@ void Uidrv_SetStatusLed2(Led_Status_T led_status){
 /**
  * @brief Perform Uidrv diagnostics - requires ENABLE_MDRV_DIAGNOSTICS flag
  */
-void Uidrv_RunDiagnostics1(void){
+void Uidrv_Diagnostics_Full1(void){
         Uidrv_SetStatusLed1(LED_ON);
+}
+
+/**
+ * @brief Perform Uidrv diagnostics - requires ENABLE_MDRV_DIAGNOSTICS flag
+ */
+void Uidrv_Diagnostics_Full2(void){
+    uint8_t mode = 0xFF;
+    mode = Uidrv_GetMode();
+    DATA1("Mode %d\n", mode);
+    Uidrv_SetStatusLed1(LED_OFF);
+}
+
+/**
+ * @brief Perform Uidrv diagnostics - requires ENABLE_MDRV_DIAGNOSTICS flag
+ */
+void Uidrv_Diagnostics_Full3(void){
+    Btn_State_T btn_state = BTN_RELEASED;
+    btn_state = Uidrv_GetStartBtnState();
+    if(btn_state == BTN_PRESSED){
+        INFO("START button pressed");
+    }
+}
+
+/**
+ * @brief Perform Uidrv diagnostics - requires ENABLE_MDRV_DIAGNOSTICS flag
+ */
+void Uidrv_Diagnostics_Heartbeat1(void){
         Uidrv_SetStatusLed2(LED_ON);
 }
 
 /**
  * @brief Perform Uidrv diagnostics - requires ENABLE_MDRV_DIAGNOSTICS flag
  */
-void Uidrv_RunDiagnostics2(void){
-    uint8_t mode = 0xFF;
-    mode = Uidrv_GetMode();
-    DATA1("Mode %d\n", mode);
-    Uidrv_SetStatusLed1(LED_OFF);
+void Uidrv_Diagnostics_Heartbeat2(void){
     Uidrv_SetStatusLed2(LED_OFF);
-}
-
-/**
- * @brief Perform Uidrv diagnostics - requires ENABLE_MDRV_DIAGNOSTICS flag
- */
-void Uidrv_RunDiagnostics3(void){
-    Btn_State_T btn_state = BTN_RELEASED;
-    btn_state = Uidrv_GetStartBtnState();
-    if(btn_state == BTN_PRESSED){
-        INFO("START button pressed");
-    }
 }
