@@ -18,7 +18,6 @@
 /** @brief Initialize the module
 */
 void BEH_Init(void){
-    BEH_Init();
     INFO_P(PGM_BEH_INIT);
 }
 

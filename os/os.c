@@ -91,7 +91,7 @@ void Os_Init(void){
     Adc_Init();
     Dsdrv_Init();
     Sm_Init();
-    // BEH_Init();
+    BEH_Init();
 
     os.status = OS_INITIALIZED;
     sei();

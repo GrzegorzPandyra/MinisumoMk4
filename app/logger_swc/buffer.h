@@ -13,6 +13,7 @@
                         (buff).data_length++
 #define BUFF_HEAD(buff) ((buff).data + (buff).data_length)
 #define BUFF_CHECK_OVERFLOW(buff) (((buff).data_length+1<=sizeof((buff).data))?1u:0u)
+#define BUFF_FREESPACE(buff) (sizeof(buff.data)-buff.data_length)
 
 typedef struct Small_Buffer_Tag{
     char data[BUFFER_SIZE_SMALL];
