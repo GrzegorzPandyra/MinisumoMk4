@@ -46,7 +46,8 @@
         PGM_MDRV_DIAG_PWM60,
         PGM_MDRV_DIAG_PWM80,
         PGM_MDRV_DIAG_PWM100,
-        PGM_MDRV_DIAG_STOP
+        PGM_MDRV_DIAG_STOP,
+        PGM_SM_INIT
     } Progmem_Table_Index_T;
 
     /* Global variables */

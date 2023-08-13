@@ -24,7 +24,8 @@ DRV_MODULES  = 	distance_sensor_drv \
 				i2c_drv \
 				user_input_drv \
 				uart_drv
-APP_MODULES  = logger_swc
+APP_MODULES  = logger_swc \
+			   state_machine_swc
 LIB_MODULES  = avr_i2c/twi
 
 #assemble list of source files

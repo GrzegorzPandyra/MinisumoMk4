@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "common_const.h"
 #include "serial_rx.h"
 #include "serial_tx.h"
 #include "config.h"

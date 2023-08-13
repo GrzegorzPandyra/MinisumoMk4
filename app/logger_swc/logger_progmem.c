@@ -31,6 +31,7 @@ static const char PGM_DATA_MDRV_DIAG_PWM60[]        PROGMEM = "PWM 60%";
 static const char PGM_DATA_MDRV_DIAG_PWM80[]        PROGMEM = "PWM 80%";
 static const char PGM_DATA_MDRV_DIAG_PWM100[]       PROGMEM = "PWM 100%";
 static const char PGM_DATA_MDRV_DIAG_STOP[]         PROGMEM = "Stopping...";
+static const char PGM_DATA_SM_INIT[]                PROGMEM = "SM init";
 
 
 Small_Buffer_T BUFFER(flash_to_ram_buffer); 
@@ -62,5 +63,6 @@ const char* const PGM_DATA_LIST[] PROGMEM = {
     PGM_DATA_MDRV_DIAG_PWM60,
     PGM_DATA_MDRV_DIAG_PWM80,
     PGM_DATA_MDRV_DIAG_PWM100,
-    PGM_DATA_MDRV_DIAG_STOP
+    PGM_DATA_MDRV_DIAG_STOP,
+    PGM_DATA_SM_INIT,
 };

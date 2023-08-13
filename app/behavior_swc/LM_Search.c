@@ -4,7 +4,6 @@
 #include "LM_Search.h"
 #include "UART_TX.h"
 #include "stdlib.h"
-#include "common_const.h"
 
 #undef RAND_MAX 
 #define RAND_MAX 0x0003

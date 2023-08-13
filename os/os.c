@@ -17,6 +17,7 @@
 #include "user_input_drv.h"
 /* SWCs */
 #include "logger_tx.h"
+#include "state_machine.h"
 
 #define OS_TASKS_TOTAL 8U
 #define ALIVE_TIMER_DEFUALT_VALUE 0U
@@ -88,6 +89,8 @@ void Os_Init(void){
     Ls_Init();
     Adc_Init();
     Dsdrv_Init();
+    Sm_Init();
+
     os.status = OS_INITIALIZED;
     sei();
 }
