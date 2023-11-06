@@ -56,7 +56,8 @@
         PGM_SM_STATE_SEARCH,
         PGM_SM_STATE_INVALID,
         PGM_BEH_LD_MODE_STRICT,
-        PGM_BEH_LD_MODE_CAREFUL
+        PGM_BEH_LD_MODE_CAREFUL,
+        PGM_IRDRV_INIT
     } Progmem_Table_Index_T;
 
     /* Global variables */

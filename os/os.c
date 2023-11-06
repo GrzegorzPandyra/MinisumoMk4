@@ -16,6 +16,7 @@
 #include "line_sensor_drv.h"
 #include "distance_sensor_drv.h"
 #include "user_input_drv.h"
+#include "ir_drv.h"
 /* SWCs */
 #include "logger_tx.h"
 #include "state_machine.h"
@@ -88,6 +89,7 @@ static void Os_Task_1ms(void){
 
 static void Os_Task_10ms(void){
     logger_transmit();
+    IRDrv_ReadPin();
 }
 
 static void Os_Task_100ms(void){
@@ -160,6 +162,7 @@ void Os_Init(void){
     Ls_Init();
     Adc_Init();
     Dsdrv_Init();
+    IRDrv_Init();
     Sm_Init();
     BEH_Init();
     UI_Init();

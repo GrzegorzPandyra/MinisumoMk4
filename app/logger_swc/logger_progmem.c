@@ -41,6 +41,7 @@ static const char PGM_DATA_SM_STATE_SEARCH[]         PROGMEM = "SM state: SEARCH
 static const char PGM_DATA_SM_STATE_INVALID[]        PROGMEM = "SM state: INVALID!";
 static const char PGM_DATA_BEH_LD_MODE_STRICT[]      PROGMEM = "Line detection mode: STRICT";
 static const char PGM_DATA_BEH_LD_MODE_CAREFUL[]     PROGMEM = "Line detection mode: CAREFUL";
+static const char PGM_DATA_IRDRV_INIT[]              PROGMEM = "IR drv init";
 
 
 Small_Buffer_T BUFFER(flash_to_ram_buffer); 
@@ -82,5 +83,6 @@ const char* const PGM_DATA_LIST[] PROGMEM = {
     PGM_DATA_SM_STATE_SEARCH,
     PGM_DATA_SM_STATE_INVALID,
     PGM_DATA_BEH_LD_MODE_STRICT,
-    PGM_DATA_BEH_LD_MODE_CAREFUL
+    PGM_DATA_BEH_LD_MODE_CAREFUL,
+    PGM_DATA_IRDRV_INIT
 };

@@ -1,11 +1,12 @@
 /** @file user_input_swc.c
-*   @brief 
+*   @brief Module handling the inputs from user
 */
 #include "logger_tx.h"
 #include "stdlib.h"
 #include "user_input_swc.h"
 #include "user_input_drv.h"
 #include "state_machine.h"
+#include "ir_drv.h"
 
 #define COUNTDOWN_INIT_MS 5000u
 #define SEC_TO_MS 1000u
@@ -26,6 +27,9 @@ static uint16_t countdown_counter = COUNTDOWN_INIT_MS;
 /*****************************************************
  * Private functions
  *****************************************************/
+static bool CheckInput(void);
+static void ToggleStateLED(void);
+
 /**
  * @brief Toggle state of SM LED depending on current SM State
  */
@@ -54,22 +58,36 @@ static void ToggleStateLED(void){
     }
 }
 
+/**
+ * @brief Check condition for robot activation
+ * @return true When either manual or remote trigger has been activated
+ * @return false Otherwise
+ */
+static bool CheckInput(void){
+    return ((Uidrv_GetStartBtnState() == BTN_PRESSED) || (IRDrv_GetState() == IR_TRIGGERED));
+}
+
 /*****************************************************
  * Public functions
  *****************************************************/
 
-/** @brief Initialize the module
+/** 
+ * @brief Initialize the module
 */
 void UI_Init(void){
     INFO_P(PGM_UI_INIT);
 }
 
+/**
+ * @brief Main UI function
+ */
 void UI_Run(void){
     switch (Sm_GetState()){
     case SM_IDLE:
         /* Arm the robot */
-        if(Uidrv_GetStartBtnState() == BTN_PRESSED){
+        if(CheckInput()){
             Sm_SetState(SM_ARMED);
+            IRDrv_ClearState();
         } 
 
         /* Auto-arming */
@@ -78,8 +96,9 @@ void UI_Run(void){
         }
         break;
     case SM_ARMED:
-        if(Uidrv_GetStartBtnState() == BTN_PRESSED){
-            /* Abort arming process and reset to IDLE */
+        if(CheckInput()){
+            /* Abort arming procedure */
+            IRDrv_ClearState();
             Sm_SetState(SM_IDLE);
             countdown_counter = COUNTDOWN_INIT_MS;
         } else {
@@ -98,11 +117,10 @@ void UI_Run(void){
     case SM_ATTACK:
     case SM_LINE_DETECTED:
     default:
-        if(Uidrv_GetStartBtnState() == BTN_PRESSED){
-            /* Go back to IDLE */
+        if(CheckInput()){
+            IRDrv_ClearState();
             Sm_SetState(SM_IDLE);
             countdown_counter = COUNTDOWN_INIT_MS;
-            INFO("GOING IDLE!!!!");
         }
         break;
     }

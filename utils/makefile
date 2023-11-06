@@ -4,12 +4,13 @@
 
 #folders
 PROJECT_ROOT=..
-OUT_DIR	 = $(PROJECT_ROOT)/out
-MCAL_DIR = $(PROJECT_ROOT)/mcal
-DRV_DIR	 = $(PROJECT_ROOT)/drv
-APP_DIR  = $(PROJECT_ROOT)/app
-LIB_DIR  = $(PROJECT_ROOT)/lib
-OS_DIR   = $(PROJECT_ROOT)/os
+OUT_DIR	   = $(PROJECT_ROOT)/out
+MCAL_DIR   = $(PROJECT_ROOT)/mcal
+DRV_DIR	   = $(PROJECT_ROOT)/drv
+APP_DIR    = $(PROJECT_ROOT)/app
+LIB_DIR    = $(PROJECT_ROOT)/lib
+OS_DIR     = $(PROJECT_ROOT)/os
+CONFIG_DIR = $(PROJECT_ROOT)/config
 
 MCAL_MODULES = 	startup \
 				isr \
@@ -22,11 +23,14 @@ DRV_MODULES  = 	distance_sensor_drv \
 				motor_drv \
 				i2c_drv \
 				user_input_drv \
-				uart_drv
+				uart_drv \
+				ir_drv
+
 APP_MODULES  = logger_swc \
 			   state_machine_swc \
 			   behavior_swc \
 			   user_input_swc
+			   
 LIB_MODULES  = avr_i2c/twi
 
 #assemble list of source files
@@ -42,6 +46,7 @@ INCLUDE_DIR += $(foreach module, $(DRV_MODULES),  -I $(wildcard $(DRV_DIR)/$(mod
 INCLUDE_DIR += $(foreach module, $(APP_MODULES),  -I $(wildcard $(APP_DIR)/$(module)))
 INCLUDE_DIR += $(foreach module, $(LIB_MODULES),  -I $(wildcard $(LIB_DIR)/$(module)))
 INCLUDE_DIR += -I $(OS_DIR)
+INCLUDE_DIR += -I $(CONFIG_DIR)
 
 #compiler
 CC=avr-gcc
