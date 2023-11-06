@@ -44,3 +44,13 @@ void Utils_SetBit(Register_T reg, uint8_t bit, uint8_t val){
 uint8_t Utils_GetBit(Register_T reg, uint8_t bit){
     return (((*reg) & (1<<bit)) > 0 )? 1 : 0;
 }
+
+/**
+ * @brief Tool to get current size of free RAM
+ * @return int Size of free RAM
+ */
+int Utils_FreeRam(void){
+  extern int __heap_start, *__brkval; 
+  int v; 
+  return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval); 
+}

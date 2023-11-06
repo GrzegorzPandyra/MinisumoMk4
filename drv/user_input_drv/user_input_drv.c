@@ -25,6 +25,10 @@
 
 #define STATUS_LED_1_PORT PORTC
 #define STATUS_LED_2_PORT PORTD
+/*****************************************************
+ * Private variables
+ *****************************************************/
+static Btn_State_T previous_state = BTN_RELEASED; 
 /**********************************************************************
 * Public functions 
 ***********************************************************************/
@@ -62,13 +66,19 @@ uint8_t Uidrv_GetMode(void)
 }
 
 /**
- * @brief Return state of start btn
+ * @brief Return state of start btn. Reports button press only once per press.
  * @return uint8_t start btn status
  */
 Btn_State_T Uidrv_GetStartBtnState(void)
 {
-    // DATA1("startbtn %d\n", Utils_GetBit((Register_T)&START_BTN_PIN, START_BTN));
-    return Utils_GetBit((Register_T)&START_BTN_PIN, START_BTN)?BTN_RELEASED:BTN_PRESSED;
+    Btn_State_T result;
+    Btn_State_T current_state = Utils_GetBit((Register_T)&START_BTN_PIN, START_BTN)?BTN_RELEASED:BTN_PRESSED;
+    if(previous_state != current_state){
+        previous_state = result = current_state;
+    } else {
+        result = BTN_RELEASED;
+    }
+    return result;
 }
 
 /**

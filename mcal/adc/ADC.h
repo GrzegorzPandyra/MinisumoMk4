@@ -6,8 +6,8 @@
 */
 
 typedef enum {
-    CHANNEL0,
-    CHANNEL1
+    ADC_CHANNEL0,
+    ADC_CHANNEL1
 }Adc_Channel_T;
 
 void Adc_Init(void);

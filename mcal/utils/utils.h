@@ -15,5 +15,5 @@ uint8_t Utils_ReadRegister(Register_T reg);
 uint16_t Utils_ReadRegister16(Register16_T reg);
 void Utils_SetBit(Register_T reg, uint8_t bit, uint8_t val);
 uint8_t Utils_GetBit(Register_T reg, uint8_t bit);
-
+int Utils_FreeRam(void);
 #endif /* REGISTER_GUARD */

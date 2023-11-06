@@ -7,22 +7,61 @@
 #include "logger_tx.h"
 #include "adc.h"
 
+/**********************************************************************
+* Macros 
+***********************************************************************/
 #define MAX_NUM_SAMPLES 5
-#define LEFT_DS_PIN PC0
-#define RIGHT_DS_PIN PC1
+#define LEFT_DS_PIN PC1
+#define RIGHT_DS_PIN PC0
+#define RIGHT_DS_ADC_CHANNEL ADC_CHANNEL0
+#define LEFT_DS_ADC_CHANNEL ADC_CHANNEL1
 
+#if ENABLE_DS_DIAGNOSTICS
+    #define STR_BUFF_LENGTH 80u
+    #define DISTANCE_DISPLAY_DIVISOR 15u
+#endif
+
+/**********************************************************************
+* Typedefs
+***********************************************************************/
 typedef struct Distance_Sensor_Tag{
     uint16_t samples[MAX_NUM_SAMPLES];
-    uint8_t samples_stored_cnt;
     uint16_t *sample_ptr;
     uint8_t pin;
     Adc_Channel_T channel;
 } Distance_Sensor_T;
 
-static Distance_Sensor_T ds_left = {{0}, 0, NULL, LEFT_DS_PIN, CHANNEL0};
-static Distance_Sensor_T ds_right = {{0}, 0, NULL, RIGHT_DS_PIN, CHANNEL1};
-static Distance_Sensor_T *active_ds = NULL;
+typedef struct {
+    Distance_Sensor_T left_sensor;
+    Distance_Sensor_T right_sensor;
+    Distance_Sensor_T *active_sensor;
+} DSDrv_Mgr_T;
 
+/**********************************************************************
+* Private variables
+***********************************************************************/
+static DSDrv_Mgr_T dsdrv_mgr = {
+    .left_sensor  = {{0}, NULL, LEFT_DS_PIN, LEFT_DS_ADC_CHANNEL},
+    .right_sensor = {{0}, NULL, RIGHT_DS_PIN, RIGHT_DS_ADC_CHANNEL},
+    .active_sensor = NULL
+};
+/**********************************************************************
+* Private functions 
+***********************************************************************/
+
+/**
+ * @brief Add new sample to sensor buffer
+ * @param sensor sensor to add the sample to
+ * @param sample value to be added
+ */
+static void PushSample(Distance_Sensor_T *sensor, uint16_t sample){
+    *(sensor->sample_ptr) = sample;
+    if(sensor->sample_ptr == &(sensor->samples[MAX_NUM_SAMPLES-1])){
+        sensor->sample_ptr = sensor->samples;
+    } else {
+        sensor->sample_ptr++;
+    }
+}
 /**********************************************************************
 * Public functions 
 ***********************************************************************/
@@ -31,73 +70,72 @@ static Distance_Sensor_T *active_ds = NULL;
 */
 void Dsdrv_Init(void){
     INFO_P(PGM_DSD_INIT);
+
     /* Set DS pins as input */
     Utils_SetBit((Register_T) &DDRC, LEFT_DS_PIN, BIT_CLEARED);
     Utils_SetBit((Register_T) &DDRC, RIGHT_DS_PIN, BIT_CLEARED);
+
     /* Initialize sample_ptr */
-    ds_left.sample_ptr = ds_left.samples;
-    ds_right.sample_ptr = ds_right.samples;
-    active_ds = &ds_left;
+    dsdrv_mgr.left_sensor.sample_ptr = dsdrv_mgr.left_sensor.samples;
+    dsdrv_mgr.right_sensor.sample_ptr = dsdrv_mgr.right_sensor.samples;
+    dsdrv_mgr.active_sensor = &dsdrv_mgr.left_sensor;
 }
 
 /** @brief Get distance reading as an average of collected samples.
-    @param none
-    @return distance (only measure), the higher the value, the closer the target
+    @return distance to target between <0, ~750>, no specific unit. Highest value achieved around 5cm from target.
 */
 Ds_Output_T Dsdrv_GetDistance(void){
-    // uint16_t result = 0;
-    // for(uint8_t i=0; i<ds_sensor.samples_stored_cnt; i++){
-    //     result += ds_sensor.samples[i];
-    // }
-    // return result/(uint16_t)ds_sensor.samples_stored_cnt;
-    Ds_Output_T output = {ds_left.samples[0], ds_right.samples[0]};
-    return output;
+    Ds_Output_T result = {0u, 0u};
+    for(uint8_t i=0; i<MAX_NUM_SAMPLES; i++){
+        result.l_ds_output += dsdrv_mgr.left_sensor.samples[i];
+        result.r_ds_output += dsdrv_mgr.right_sensor.samples[i];
+    }
+    result.l_ds_output /= MAX_NUM_SAMPLES;
+    result.r_ds_output /= MAX_NUM_SAMPLES;
+    return result;
 }
 
-/** @brief Write new value to sensor buffer. Called in ISR when ADC conversion is finished.
-    @return none
+/** 
+ * @brief Write new value to sensor buffer. Called in ISR when ADC conversion is finished.
+ * @return none
 */
 void Dsdrv_ConversionCallback(){
-    volatile uint16_t adc_value = ADC_GetValue();
-    // *(active_ds->sample_ptr) = adc_value;
-    active_ds->samples[0] = adc_value;
-    // if(active_ds->sample_ptr == &(active_ds->samples[MAX_NUM_SAMPLES-1])){
-    //     active_ds->sample_ptr = active_ds->samples;
-    // } else {
-    //     active_ds->sample_ptr++;
-    // }
+    volatile uint16_t adc_value;
 
-    // if(active_ds->samples_stored_cnt < MAX_NUM_SAMPLES){
-    //     active_ds->samples_stored_cnt++;
-    // }
+    /* Read sensor value */
+    adc_value = ADC_GetValue();
 
-     switch(active_ds->channel){
-        case CHANNEL0:
-            active_ds = &ds_right;
-        break;
-        case CHANNEL1:
-            active_ds = &ds_left;
-        break;
+    /* Add new sample to the sample array */
+    PushSample(dsdrv_mgr.active_sensor, adc_value);
+
+    /* Switch active sensor */
+     switch(dsdrv_mgr.active_sensor->channel){
+        case RIGHT_DS_ADC_CHANNEL:
+            dsdrv_mgr.active_sensor = &dsdrv_mgr.left_sensor;
+            break;
+        case LEFT_DS_ADC_CHANNEL:
+            dsdrv_mgr.active_sensor = &dsdrv_mgr.right_sensor;
+            break;
         default: 
             ERROR("Invalid channel");
-        break;
+            break;
     }
-    Adc_SetChannel(active_ds->channel);
+    Adc_SetChannel(dsdrv_mgr.active_sensor->channel);
 }
 
 #if ENABLE_DS_DIAGNOSTICS
     void Dsdrv_RunDiagnostics(void){
-        char left_str[100] = {'\0'};
-        char right_str[100] = {'\0'};
+        char left_str[STR_BUFF_LENGTH] = {'\0'};
+        char right_str[STR_BUFF_LENGTH] = {'\0'};
         uint8_t i;
-        for(i=0; i<ds_left.samples[0]/10; i++){
+        for(i=0; i<dsdrv_mgr.left_sensor.samples[0]/DISTANCE_DISPLAY_DIVISOR; i++){
             left_str[i] = '=';
         }
-        for(i=0; i<ds_right.samples[0]/10; i++){
+        for(i=0; i<dsdrv_mgr.right_sensor.samples[0]/DISTANCE_DISPLAY_DIVISOR; i++){
             right_str[i] = '=';
         }
         /* Alignment to keep display even */
-        DATA2(" LEFT DS: %u %s\n", ds_left.samples[0],  left_str);
-        DATA2("RIGHT DS: %u %s\n", ds_right.samples[0], right_str);
+        DATA2(" LEFT DS: %u %s\n", dsdrv_mgr.left_sensor.samples[0],  left_str);
+        DATA2("RIGHT DS: %u %s\n", dsdrv_mgr.right_sensor.samples[0], right_str);
     }
 #endif

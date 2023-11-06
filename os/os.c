@@ -8,6 +8,7 @@
 /* MCAL */
 #include "timer0.h"
 #include "adc.h"
+#include "utils.h"
 /* drivers */
 #include "uart_drv.h"
 #include "motor_drv.h"
@@ -18,10 +19,13 @@
 /* SWCs */
 #include "logger_tx.h"
 #include "state_machine.h"
-#include "behavior.h"
+#include "behavior_main.h"
+#include "behavior_line_detection.h"
+#include "user_input_swc.h"
 
 #define OS_TASKS_TOTAL 8U
 #define ALIVE_TIMER_DEFUALT_VALUE 0U
+#define RANDOM_MOD_FACTOR 100u
 
 /* Custom types */
 enum TaskType {INIT, PERIODIC, TRIGGERED};
@@ -77,41 +81,9 @@ static Os_T os = {
 /*****************************************************
  * Private functions
  *****************************************************/
-
-/*****************************************************
- * Public functions
- *****************************************************/
-void Os_Init(void){
-    Uart_Init();
-    INFO_P(PGM_OS_INIT);
-    Timer0_Init();
-    Mdrv_Init();
-    I2c_Init();
-    Ls_Init();
-    Adc_Init();
-    Dsdrv_Init();
-    Sm_Init();
-    BEH_Init();
-
-    os.status = OS_INITIALIZED;
-    sei();
-}
-
-void Os_Run(void){
-    if(os.status == OS_INITIALIZED){
-        Task_T *current_task;
-        os.alive_timer++;
-        for(uint8_t i=0u; i<OS_TASKS_TOTAL; i++){
-            current_task = &os.tasks[i];
-            if((current_task->type == PERIODIC) && (os.alive_timer%current_task->period_ms == 0)){
-                current_task->task_handler();
-            }
-        }
-    }
-}
-
 static void Os_Task_1ms(void){
     Mdrv_PWMHandler();
+    BEH_Run();
 }
 
 static void Os_Task_10ms(void){
@@ -119,7 +91,7 @@ static void Os_Task_10ms(void){
 }
 
 static void Os_Task_100ms(void){
-    BEH_Run();
+    UI_Run();
 }
 
 static void Os_Task_500ms(void){
@@ -135,6 +107,10 @@ static void Os_Task_500ms(void){
 }
 
 static void Os_Task_1000ms(void){
+    #if ENABLE_RAM_TRACKING
+        int free_ram = Utils_FreeRam();
+        DATA1("RAM = %i\n", free_ram);
+    #endif
     // INFO("1000ms task");
     #if ENABLE_LS_DIAGNOSTICS
         Ls_RunDiagnostics();
@@ -166,4 +142,62 @@ static void Os_Task_2000ms(void){
 
 static void Os_Task_5000ms(void){
     // INFO("5000ms task");
+}
+
+/*****************************************************
+ * Public functions
+ *****************************************************/
+
+/**
+ * @brief Initiate the module
+ */
+void Os_Init(void){
+    Uart_Init();
+    INFO_P(PGM_OS_INIT);
+    Timer0_Init();
+    Mdrv_Init();
+    I2c_Init();
+    Ls_Init();
+    Adc_Init();
+    Dsdrv_Init();
+    Sm_Init();
+    BEH_Init();
+    UI_Init();
+
+    os.status = OS_INITIALIZED;
+    sei();
+}
+
+/**
+ * @brief Increment OS main timer and execute apropriate tasks
+ */
+void Os_Run(void){
+    if(os.status == OS_INITIALIZED){
+        Task_T *current_task;
+        os.alive_timer++;
+        for(uint8_t i=0u; i<OS_TASKS_TOTAL; i++){
+            current_task = &os.tasks[i];
+            if((current_task->type == PERIODIC) && (os.alive_timer%current_task->period_ms == 0)){
+                current_task->task_handler();
+            }
+        }
+    }
+}
+
+/**
+ * @brief Return current OS time
+ * @return uint32_t time
+ */
+uint32_t OS_GetTime(void){
+    return os.alive_timer;
+}
+
+/**
+ * @brief Return pseudo-random number
+ * @return uint8_t random value from 1-100
+ */
+uint8_t OS_GetRandom(void){
+    static uint8_t iteration_factor;
+    iteration_factor++;
+    return (((os.alive_timer+iteration_factor+ADC_GetValue())%RANDOM_MOD_FACTOR)+1);
 }

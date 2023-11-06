@@ -12,6 +12,7 @@ void Mdrv_Forward(void);
 void Mdrv_Backward(void);
 void Mdrv_TurnRight(void);
 void Mdrv_TurnLeft(void);
+void Mdrv_Stop(void);
 void Mdrv_SetPWM(uint8_t pwm);
 void Mdrv_PWMHandler(void);
 void Mdrv_Selfcheck(void);

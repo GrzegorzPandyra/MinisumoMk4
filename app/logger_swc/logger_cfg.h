@@ -8,7 +8,7 @@
 
 /*  When buffering is enabled, all logs shall be enqueued and transmitted based on task execution. 
     When buffering is disabled logs shall be sent directly to UDR */
-#define BUFFERING_ENABLED 1U
+#define BUFFERING_ENABLED 0U
 
 /* Immediately push TX buffer when overflow is detected. Turning it off will cause data loss. */
 #define TRANSMIT_WHEN_TX_OVFL 1U

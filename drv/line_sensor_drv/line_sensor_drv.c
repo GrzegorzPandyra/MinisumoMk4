@@ -4,6 +4,7 @@
 #include "line_sensor_drv.h"
 #include "i2c_drv.h"
 #include "logger_tx.h"
+#include "os.h"
 
 /** @brief Initialize the module
 */

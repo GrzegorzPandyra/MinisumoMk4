@@ -20,7 +20,7 @@ void Adc_Init(void){
     Utils_SetBit((Register_T)&ADMUX, REFS1, BIT_CLEARED);
 
     /* Channel 0 */
-    Adc_SetChannel(CHANNEL0);
+    Adc_SetChannel(ADC_CHANNEL0);
 
     /* Autotrigger enable (to enable custom conversion trigger) */
     Utils_SetBit((Register_T)&ADCSRA, ADATE, BIT_SET);
@@ -44,13 +44,13 @@ void Adc_Init(void){
 
 void Adc_SetChannel(Adc_Channel_T channel){
     switch(channel){
-        case CHANNEL0:
+        case ADC_CHANNEL0:
             Utils_SetBit((Register_T)&ADMUX, MUX0, BIT_CLEARED);
             Utils_SetBit((Register_T)&ADMUX, MUX1, BIT_CLEARED);
             Utils_SetBit((Register_T)&ADMUX, MUX2, BIT_CLEARED);
             Utils_SetBit((Register_T)&ADMUX, MUX3, BIT_CLEARED);
         break;
-        case CHANNEL1:
+        case ADC_CHANNEL1:
             Utils_SetBit((Register_T)&ADMUX, MUX0, BIT_SET);
             Utils_SetBit((Register_T)&ADMUX, MUX1, BIT_CLEARED);
             Utils_SetBit((Register_T)&ADMUX, MUX2, BIT_CLEARED);

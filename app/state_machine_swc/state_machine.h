@@ -6,8 +6,10 @@
 typedef enum {
     SM_IDLE = 0u,
     SM_ARMED, 
+    SM_SEARCH,
     SM_ATTACK,
-    SM_LINE_DETECTED
+    SM_LINE_DETECTED,
+    SM_LINE_CLEARED
 } SM_State_T;
 
 

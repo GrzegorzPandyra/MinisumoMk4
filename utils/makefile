@@ -12,7 +12,6 @@ LIB_DIR  = $(PROJECT_ROOT)/lib
 OS_DIR   = $(PROJECT_ROOT)/os
 
 MCAL_MODULES = 	startup \
-				config \
 				isr \
 				utils \
 				adc \
@@ -26,7 +25,8 @@ DRV_MODULES  = 	distance_sensor_drv \
 				uart_drv
 APP_MODULES  = logger_swc \
 			   state_machine_swc \
-			   behavior_swc
+			   behavior_swc \
+			   user_input_swc
 LIB_MODULES  = avr_i2c/twi
 
 #assemble list of source files
@@ -49,7 +49,8 @@ MMCU=atmega328P
 CFLAGS= -Wall -Os -std=c99 -mmcu=$(MMCU)
 DEFINES = 	-D DUMMY_DEFINE_1 \
 
-include ../mcal/config/global_config
+include ../config/global_config.cfg
+include ../config/diag_config.cfg
 
 #default rule
 all: clean minisumo_mk4.elf minisumo_mk4.hex mem print_ok
@@ -78,6 +79,7 @@ clean:
 #memory analysis
 mem: minisumo_mk4.elf 
 	avr-size --format=berkeley --common --totals ../out/minisumo_mk4.elf
+	#avr-size --format=sysv --common --totals ../out/minisumo_mk4.elf
 
 #just decoration
 print_ok:

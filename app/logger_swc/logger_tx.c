@@ -21,8 +21,10 @@
 #define COLON_CHAR ':'
 
 /* Local static variables */
-Large_Buffer_T BUFFER(logger_tx_buffer); 
-Large_Buffer_T BUFFER(logger_data_buffer); 
+#if BUFFERING_ENABLED
+    Large_Buffer_T BUFFER(logger_tx_buffer); 
+#endif
+Medium_Buffer_T BUFFER(logger_data_buffer); 
 
 /* Local static functions */
 static void get_filename_from_path(Medium_Buffer_T *buff, const char *path);

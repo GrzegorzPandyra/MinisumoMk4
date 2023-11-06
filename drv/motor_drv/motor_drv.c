@@ -92,7 +92,7 @@ void Mdrv_PWMHandler(void){
         Utils_SetBit((Register_T)&PWM_PORT, PWM_PIN, BIT_CLEARED);
     }
 
-    if(pwm_mgr.current_value == PWM_MAX){
+    if(pwm_mgr.current_value >= PWM_MAX){
         pwm_mgr.current_value = 0;
     } else {
         pwm_mgr.current_value += PWM_PRECISION_COEFFCIENT;

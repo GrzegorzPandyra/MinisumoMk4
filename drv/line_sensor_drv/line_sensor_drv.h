@@ -10,8 +10,6 @@ x--^^^^^^^--x
 x-----------x
 */
 
-#define LS_NOT_TRIGGERED 0xFF
-
 typedef struct Ls_Status_Tag {
     uint8_t ls0:1;
     uint8_t ls1:1;
