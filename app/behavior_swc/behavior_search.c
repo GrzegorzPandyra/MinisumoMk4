@@ -10,8 +10,8 @@
 /*****************************************************
  * Macros
  *****************************************************/
-#define SPIN_AND_GO_MIN_ACTION_TIME_MS 300u
-#define SPIN_AND_GO_MAX_ACTION_TIME_MS 600
+#define SPIN_AND_GO_MIN_ACTION_TIME_MS 500u
+#define SPIN_AND_GO_MAX_ACTION_TIME_MS 1000
 
 /*****************************************************
  * Typedefs

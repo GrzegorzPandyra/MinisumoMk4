@@ -23,37 +23,59 @@ static Last_Action_T last_action = MOVE_FORWARD;
 /*****************************************************
  * Private functions
  *****************************************************/
+static void NewActionNotification(Last_Action_T current_action);
 
+/**
+ * @brief Print new action that is being executed
+ */
+static void NewActionNotification(Last_Action_T current_action){
+    if(current_action != last_action){
+        switch (current_action){
+        case MOVE_FORWARD:
+            INFO("ACTION: FORWARD");
+            break;
+        case MOVE_BACKWARD:
+            INFO("ACTION: BACKWARWD");
+            break;
+        case TURN_RIGHT:
+            INFO("ACTION: TURN RIGHT");
+            break;
+        case TURN_LEFT:
+            INFO("ACTION: TURN LEFT");
+            break;
+        case TURN:
+            INFO("ACTION: TURN");
+            break;
+        case STOP:
+            INFO("ACTION: STOP");
+            break;
+        default:
+            break;
+        }
+    }
+}
 /*****************************************************
  * Public functions
  *****************************************************/
 void BEH_Actions_MoveForward(void){
     Mdrv_Forward();
+    NewActionNotification(MOVE_FORWARD);
     last_action = MOVE_FORWARD;
-    #ifdef ENABLE_BEH_DIAGNOSTICS
-        INFO("FW");
-    #endif
 }
 void BEH_Actions_MoveBackward(void){
     Mdrv_Backward();
+    NewActionNotification(MOVE_BACKWARD);
     last_action = MOVE_BACKWARD;
-    #ifdef ENABLE_BEH_DIAGNOSTICS
-        INFO("BW");
-    #endif
 }
 void BEH_Actions_TurnRight(void){
     Mdrv_TurnRight();
+    NewActionNotification(TURN_RIGHT);
     last_action = TURN_RIGHT;
-    #ifdef ENABLE_BEH_DIAGNOSTICS
-        INFO("TR");
-    #endif
 }
 void BEH_Actions_TurnLeft(void){
     Mdrv_TurnLeft();
+    NewActionNotification(TURN_LEFT);
     last_action = TURN_LEFT;
-    #ifdef ENABLE_BEH_DIAGNOSTICS
-        INFO("TL");
-    #endif
 }
 void BEH_Actions_Turn(void){
     static bool direction_flag = false;
@@ -62,22 +84,18 @@ void BEH_Actions_Turn(void){
     } else {
         Mdrv_TurnRight();
     }
+    NewActionNotification(TURN);
 
     /* Switch direction only if Turn is a new action picked. Otherwise robot won't move because of alternating turns. */
     if(last_action != TURN){
         direction_flag = !direction_flag;
     }
     last_action = TURN;
-    #ifdef ENABLE_BEH_DIAGNOSTICS
-        INFO("T");
-    #endif
 }
 void BEH_Actions_Stop(void){
     Mdrv_Stop();
+    NewActionNotification(STOP);
     last_action = STOP;
-    #ifdef ENABLE_BEH_DIAGNOSTICS
-        INFO("STOP");
-    #endif
 }
 void BEH_Actions_SetSpeed(Speed_Level_T speed){
     Mdrv_SetPWM((uint8_t)speed);

@@ -84,7 +84,9 @@ static Os_T os = {
  *****************************************************/
 static void Os_Task_1ms(void){
     Mdrv_PWMHandler();
-    BEH_Run();
+    #ifndef ENABLE_MDRV_DIAGNOSTICS
+        BEH_Run();
+    #endif
 }
 
 static void Os_Task_10ms(void){

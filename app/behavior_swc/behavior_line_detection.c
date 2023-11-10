@@ -192,7 +192,7 @@ void BEH_LineDetection_Run(void){
     ld_mgr.recommendation.action = PickAction();
 
     if(line_detected){
-        /* Take immediate action to gat away from the line */
+        /* Take immediate action to get away from the line */
         ld_mgr.recommendation.state = SM_LINE_DETECTED;
         ld_mgr.recommendation.speed = SL_MAX;
         ld_mgr.clear_timer = 0u;
