@@ -6,7 +6,8 @@
 #include "timer0.h"
 #include "logger_tx.h"
 
-#define TIMER0_COMPA 250
+/* Value picked via testing to achieve real time measurement */
+#define TIMER0_COMPA 150
 
 void Timer0_Init(void){
     /* Set timer clk source and prescaler(64) */

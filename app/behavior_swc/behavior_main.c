@@ -7,6 +7,7 @@
 #include "behavior_enemy_detection.h"
 #include "behavior_search.h"
 #include "state_machine.h"
+#include "buzzer_drv.h"
 /*****************************************************
  * Private variables
  *****************************************************/
@@ -28,10 +29,13 @@ static void PickRecommendation(void){
     Action_Recommendation_T* picked_recommendation = NULL;
     if((beh_mgr.ld_rec.state == SM_LINE_DETECTED) || (beh_mgr.ld_rec.state == SM_LINE_CLEARED)){
         picked_recommendation = &beh_mgr.ld_rec;
+        BuzzDrv_BuzzOFF();
     } else if(beh_mgr.ed_rec.state == SM_ATTACK) {
         picked_recommendation = &beh_mgr.ed_rec;
+        BuzzDrv_BuzzON(100);
     } else /* beh_mgr.s_rec.state == SM_SEARCH */ {
         picked_recommendation = &beh_mgr.s_rec;
+        BuzzDrv_BuzzOFF();
     }
     
     Sm_SetState(picked_recommendation->state);

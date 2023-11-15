@@ -3,8 +3,11 @@
 /*! @file logger_cfg.h
     @brief Configuration of logger
 */
-/* Enable/disable logging */
-#define LOGGING_ENABLED 1U
+
+#ifndef COMPETITION_MODE
+    /* Enable/disable logging */
+    #define LOGGING_ENABLED 
+#endif 
 
 /*  When buffering is enabled, all logs shall be enqueued and transmitted based on task execution. 
     When buffering is disabled logs shall be sent directly to UDR */

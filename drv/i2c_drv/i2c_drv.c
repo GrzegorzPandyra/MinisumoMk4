@@ -4,9 +4,6 @@
 #include <avr/io.h>
 #include "i2c_drv.h"
 #include "twi_master.h"
-#ifdef LOGGING_ENABLED
-    #include "logging.h"
-#endif
 #include "logger_tx.h"
 
 /* See datasheet PCF8574 8.3.3*/

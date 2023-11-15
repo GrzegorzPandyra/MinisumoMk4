@@ -4,6 +4,7 @@
 #include "state_machine.h"
 #include "logger_tx.h"
 #include "stdlib.h"
+#include "buzzer_drv.h"
 
 static struct {
     SM_State_T state;

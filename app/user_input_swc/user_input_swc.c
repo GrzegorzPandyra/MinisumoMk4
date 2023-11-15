@@ -7,8 +7,15 @@
 #include "user_input_drv.h"
 #include "state_machine.h"
 #include "ir_drv.h"
+#include "os.h"
+#include "buzzer_drv.h"
 
-#define COUNTDOWN_INIT_MS 5000u
+#ifdef COMPETITION_MODE
+    #define COUNTDOWN_INIT_MS 0u
+#else 
+    #define COUNTDOWN_INIT_MS 5000u
+#endif
+
 #define SEC_TO_MS 1000u
 #define TASK_PERIOD_MS 100u
 
@@ -24,6 +31,7 @@
  * Private variables
  *****************************************************/
 static uint16_t countdown_counter = COUNTDOWN_INIT_MS;
+
 /*****************************************************
  * Private functions
  *****************************************************/
@@ -60,11 +68,17 @@ static void ToggleStateLED(void){
 
 /**
  * @brief Check condition for robot activation
- * @return true When either manual or remote trigger has been activated
+ * @return true When either manual or remote trigger has been activated (depending on SM_State)
  * @return false Otherwise
  */
 static bool CheckInput(void){
-    return ((Uidrv_GetStartBtnState() == BTN_PRESSED) || (IRDrv_GetState() == IR_TRIGGERED));
+    bool result;
+    if(Sm_GetState() == SM_IDLE){
+        result = ((Uidrv_GetStartBtnState() == BTN_PRESSED) || (IRDrv_GetState() == IR_TRIGGERED));
+    } else {
+        result = (Uidrv_GetStartBtnState() == BTN_PRESSED);
+    }
+    return result;
 }
 
 /*****************************************************
@@ -82,12 +96,13 @@ void UI_Init(void){
  * @brief Main UI function
  */
 void UI_Run(void){
+    bool trigger_flag = CheckInput();
+
     switch (Sm_GetState()){
     case SM_IDLE:
         /* Arm the robot */
-        if(CheckInput()){
+        if(trigger_flag){
             Sm_SetState(SM_ARMED);
-            IRDrv_ClearState();
         } 
 
         /* Auto-arming */
@@ -96,9 +111,8 @@ void UI_Run(void){
         }
         break;
     case SM_ARMED:
-        if(CheckInput()){
+        if(trigger_flag){
             /* Abort arming procedure */
-            IRDrv_ClearState();
             Sm_SetState(SM_IDLE);
             countdown_counter = COUNTDOWN_INIT_MS;
         } else {
@@ -108,6 +122,7 @@ void UI_Run(void){
                     Sm_SetState(SM_SEARCH);
                 } else {
                     DATA1("%d...\n", countdown_counter/SEC_TO_MS);
+                    BuzzDrv_BuzzON(BUZZ_SHORT_MS);
                 }
             }
             countdown_counter -= TASK_PERIOD_MS;
@@ -117,8 +132,7 @@ void UI_Run(void){
     case SM_ATTACK:
     case SM_LINE_DETECTED:
     default:
-        if(CheckInput()){
-            IRDrv_ClearState();
+        if(trigger_flag){
             Sm_SetState(SM_IDLE);
             countdown_counter = COUNTDOWN_INIT_MS;
         }

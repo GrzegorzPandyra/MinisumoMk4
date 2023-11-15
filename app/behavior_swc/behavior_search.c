@@ -58,11 +58,13 @@ static void Strat_SpinAndGo(void){
         if(action == GO){
             action = SPIN;
             s_mgr.recommendation.action = BEH_Actions_Turn;
-            s_mgr.recommendation.speed = SL_SLOW;
+            s_mgr.recommendation.speed = SL_MEDIUM;
         } else {
             action = GO;
             s_mgr.recommendation.action = BEH_Actions_MoveForward;
-            s_mgr.recommendation.speed = SL_MEDIUM;
+            s_mgr.recommendation.speed = SL_FAST;
+            /* Adjustment to give preference to moving forward */
+            timer += SPIN_AND_GO_MIN_ACTION_TIME_MS;
         }
     }
 }

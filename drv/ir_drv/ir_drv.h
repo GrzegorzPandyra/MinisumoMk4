@@ -11,7 +11,6 @@ typedef enum {
 /* IR drv interface */
 void IRDrv_Init(void);
 IR_State_T IRDrv_GetState(void);
-void IRDrv_ClearState(void);
 void IRDrv_ReadPin(void);
 
 #endif /* IRDRV_GUARD */

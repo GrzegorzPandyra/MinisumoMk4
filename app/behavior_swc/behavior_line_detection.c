@@ -70,7 +70,7 @@ static bool CheckLine(void);
  * @return Action_Cbk_T Selected action
  */
 static Action_Cbk_T PickAction(void){
-    Action_Cbk_T new_action_cbk = NULL;
+    Action_Cbk_T new_action_cbk = BEH_Actions_Turn;
     static const Status_To_Action_Map_T map[] = {
         /*                    TOP LEFT           TOP RIGHT       BOTTOM LEFT      BOTTOM RIGHT             CALLBACK          */
         {(Sensor_Status_T){LS_NOT_TRIGGERED, LS_NOT_TRIGGERED, LS_NOT_TRIGGERED, LS_TRIGGERED    }, BEH_Actions_MoveForward  },
@@ -87,7 +87,9 @@ static Action_Cbk_T PickAction(void){
         {(Sensor_Status_T){LS_TRIGGERED    , LS_TRIGGERED    , LS_TRIGGERED    , LS_NOT_TRIGGERED}, BEH_Actions_Turn         },
         {(Sensor_Status_T){LS_TRIGGERED    , LS_TRIGGERED    , LS_NOT_TRIGGERED, LS_TRIGGERED    }, BEH_Actions_Turn         },
         {(Sensor_Status_T){LS_TRIGGERED    , LS_NOT_TRIGGERED, LS_TRIGGERED    , LS_TRIGGERED    }, BEH_Actions_Turn         },
-        {(Sensor_Status_T){LS_NOT_TRIGGERED, LS_TRIGGERED    , LS_TRIGGERED    , LS_TRIGGERED    }, BEH_Actions_Turn         }
+        {(Sensor_Status_T){LS_NOT_TRIGGERED, LS_TRIGGERED    , LS_TRIGGERED    , LS_TRIGGERED    }, BEH_Actions_Turn         },
+        {(Sensor_Status_T){LS_NOT_TRIGGERED, LS_TRIGGERED    , LS_TRIGGERED    , LS_NOT_TRIGGERED}, BEH_Actions_Turn         },
+        {(Sensor_Status_T){LS_TRIGGERED    , LS_NOT_TRIGGERED, LS_NOT_TRIGGERED, LS_TRIGGERED    }, BEH_Actions_Turn         }
     };
 
     for (uint8_t i=0u; i<GET_ARR_LEN(map); i++)
@@ -199,7 +201,7 @@ void BEH_LineDetection_Run(void){
     } else if((previous_state == SM_LINE_DETECTED)) {
         /* Line has been just cleared, now we must go away from it */
         ld_mgr.recommendation.state = SM_LINE_CLEARED;
-        ld_mgr.recommendation.speed = SL_SLOW;
+        ld_mgr.recommendation.speed = SL_MEDIUM;
         ld_mgr.clear_timer = OS_GetTime();
     } else if(Sm_GetState() == SM_LINE_CLEARED){
         /* clear timer handling */
@@ -208,7 +210,8 @@ void BEH_LineDetection_Run(void){
             ld_mgr.recommendation.state = SM_SEARCH;
             ld_mgr.recommendation.speed = SL_MEDIUM;
         } else {
-            ld_mgr.recommendation.speed = SL_SLOW;
+            /* "jump-away" from detected line with max speed */
+            ld_mgr.recommendation.speed = SL_MAX;
         }
     } else {
         /* No detection at all */

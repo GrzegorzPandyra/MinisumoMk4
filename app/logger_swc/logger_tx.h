@@ -29,7 +29,7 @@ extern Medium_Buffer_T logger_data_buffer;
 /** Logging API */
 #define PACK_LOG(type, msg_id, msg_str)  (Log_T){__FILE__, __LINE__, type, msg_id, msg_str}
 
-#if LOGGING_ENABLED
+#ifdef LOGGING_ENABLED
 
     #define INFO(str)   logger_log(PACK_LOG(PGM_INFO, ID_NONE, str))
     #define INFO_P(id)  logger_log(PACK_LOG(PGM_INFO, id     , NULL))
@@ -63,7 +63,15 @@ extern Medium_Buffer_T logger_data_buffer;
     #define WARNING(str)
     #define WARNING_P(id)
     #define ERROR(str)
-    #define ERROR_P(id)  
+    #define ERROR_P(id)
+    #define DATA1(format, arg1)
+    #define DATA2(format, arg1, arg2)
+    #define DATA3(format, arg1,arg2, arg3)
+    #define DATA4(format, arg1, arg2, arg3, arg4)
+    #define DATA5(format, arg1, arg2, arg3, arg4, arg5)
+    #define DATA6(format, arg1, arg2, arg3, arg4, arg5, arg6)
+    #define DATA7(format, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+    #define DATA8(format, arg1, arg2, arg3, arg4, arg5,arg6, arg7, arg8)
 #endif
 
 void logger_log(const Log_T log);

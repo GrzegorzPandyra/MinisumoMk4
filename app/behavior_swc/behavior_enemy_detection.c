@@ -61,13 +61,13 @@ void BEH_EnemyDetection_Run(void){
     } else if((ed_mgr.sensor_data.l_ds_output >= PROXIMITY_THRESHOLD_2) && (ed_mgr.sensor_data.r_ds_output >= PROXIMITY_THRESHOLD_2)){
         /* Both sensors triggered - confident reading, faster movement*/
         ed_mgr.recommendation.action = BEH_Actions_MoveForward;
-        ed_mgr.recommendation.speed = SL_FAST;
+        ed_mgr.recommendation.speed = SL_MAX;
         ed_mgr.recommendation.state = SM_ATTACK;
 
     } else if((ed_mgr.sensor_data.l_ds_output >= PROXIMITY_THRESHOLD_1) && (ed_mgr.sensor_data.r_ds_output >= PROXIMITY_THRESHOLD_1)){
         /* Both sensors triggered - barely */
         ed_mgr.recommendation.action = BEH_Actions_MoveForward;
-        ed_mgr.recommendation.speed = SL_MEDIUM;
+        ed_mgr.recommendation.speed = SL_MAX;
         ed_mgr.recommendation.state = SM_ATTACK;
 
     } else if((ed_mgr.sensor_data.l_ds_output < PROXIMITY_THRESHOLD_1) && (ed_mgr.sensor_data.r_ds_output >= PROXIMITY_THRESHOLD_1)) {

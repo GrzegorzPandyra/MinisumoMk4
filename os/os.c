@@ -17,6 +17,7 @@
 #include "distance_sensor_drv.h"
 #include "user_input_drv.h"
 #include "ir_drv.h"
+#include "buzzer_drv.h"
 /* SWCs */
 #include "logger_tx.h"
 #include "state_machine.h"
@@ -56,24 +57,24 @@ typedef struct{
 
 /* Static functions declarations */
 static void Os_Task_1ms(void);
+static void Os_Task_2ms(void);
 static void Os_Task_10ms(void);
 static void Os_Task_100ms(void);
 static void Os_Task_500ms(void);
 static void Os_Task_1000ms(void);
 static void Os_Task_2000ms(void);
-static void Os_Task_5000ms(void);
 
 /* Local variables */
 static Os_T os = {
     {
         {INIT,     0U,    &Os_Init       },
         {PERIODIC, 1U,    &Os_Task_1ms   },
+        {PERIODIC, 2U,    &Os_Task_2ms   },
         {PERIODIC, 10U,   &Os_Task_10ms  },
         {PERIODIC, 100U,  &Os_Task_100ms },
         {PERIODIC, 500U,  &Os_Task_500ms },
         {PERIODIC, 1000U, &Os_Task_1000ms},
-        {PERIODIC, 2000U, &Os_Task_2000ms},
-        {PERIODIC, 5000U, &Os_Task_5000ms}
+        {PERIODIC, 2000U, &Os_Task_2000ms}
     },
     ALIVE_TIMER_DEFUALT_VALUE,
     OS_UNINITIALIZED
@@ -84,6 +85,9 @@ static Os_T os = {
  *****************************************************/
 static void Os_Task_1ms(void){
     Mdrv_PWMHandler();
+}
+
+static void Os_Task_2ms(void){
     #ifndef ENABLE_MDRV_DIAGNOSTICS
         BEH_Run();
     #endif
@@ -92,6 +96,7 @@ static void Os_Task_1ms(void){
 static void Os_Task_10ms(void){
     logger_transmit();
     IRDrv_ReadPin();
+    BuzzDrv_Run();
 }
 
 static void Os_Task_100ms(void){
@@ -106,8 +111,6 @@ static void Os_Task_500ms(void){
     #if ENABLE_UIM_HEARTBEAT_ONLY
         Uidrv_Diagnostics_Heartbeat1();
     #endif
-
-    Dsdrv_GetDistance();
 }
 
 static void Os_Task_1000ms(void){
@@ -115,7 +118,6 @@ static void Os_Task_1000ms(void){
         int free_ram = Utils_FreeRam();
         DATA1("RAM = %i\n", free_ram);
     #endif
-    // INFO("1000ms task");
     #if ENABLE_LS_DIAGNOSTICS
         Ls_RunDiagnostics();
     #endif
@@ -141,11 +143,6 @@ static void Os_Task_2000ms(void){
     #ifdef ENABLE_UIM_FULL_DIAGNOSTICS
         Uidrv_Diagnostics_Full2();
     #endif 
-    // INFO("2000ms task");
-}
-
-static void Os_Task_5000ms(void){
-    // INFO("5000ms task");
 }
 
 /*****************************************************
@@ -168,6 +165,7 @@ void Os_Init(void){
     Sm_Init();
     BEH_Init();
     UI_Init();
+    BuzzDrv_Init();
 
     os.status = OS_INITIALIZED;
     sei();

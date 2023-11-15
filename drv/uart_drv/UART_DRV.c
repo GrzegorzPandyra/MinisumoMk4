@@ -5,10 +5,14 @@
 #include "uart_drv.h"
 #include "uart_cfg.h"
 
-static const char SELFCHECK_STRING[] = "\t  uart_drv.c:100 :INFO !UART DRV SELFCHECK!\n";
+#ifdef UART_SELFCHECK
+    static const char SELFCHECK_STRING[] = "\t  uart_drv.c:100 :INFO !UART DRV SELFCHECK!\n";
+#endif
 
 /* Private functions */
-static void Uart_Selfcheck(void);
+#ifdef UART_SELFCHECK
+    static void Uart_Selfcheck(void);
+#endif
 
 /* Public functions */
 /**
@@ -69,7 +73,7 @@ void Uart_Init(void){
     
     /* Clear INT0 flag */
     // EIFR |= 1<<INTF0;
-    #ifdef SELFCHECK
+    #ifdef UART_SELFCHECK
         Uart_Selfcheck();
     #endif
 }
@@ -92,11 +96,13 @@ char Uart_Read(){
     return Utils_ReadRegister((Register_T)&UDR0);
 }
 
-/**
- * @brief Automatic check on driver init to let user know if driver is working correctly
- */
-static void Uart_Selfcheck(void){
-    for(uint8_t i=0; i<sizeof(SELFCHECK_STRING)/sizeof(SELFCHECK_STRING[0]); i++){
-        Uart_Write(SELFCHECK_STRING[i]);
+#ifdef UART_SELFCHECK
+    /**
+     * @brief Automatic check on driver init to let user know if driver is working correctly
+     */
+    static void Uart_Selfcheck(void){
+        for(uint8_t i=0; i<sizeof(SELFCHECK_STRING)/sizeof(SELFCHECK_STRING[0]); i++){
+            Uart_Write(SELFCHECK_STRING[i]);
+        }
     }
-}
+#endif
